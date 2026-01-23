@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <title>Jyotish Career - Vedic Astrology & Career Guide</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Discover your cosmic career blueprint through Vedic astrology. Get personalized career recommendations, timing insights, and remedies based on your birth chart." />
+    <meta name="keywords" content="Vedic astrology, career guidance, birth chart, career pathfinder, astrology career, Jyotish, career recommendations, earning sources, planetary positions, Dasha timeline, yoga detection, career insights, professional guidance" />
+    <meta name="author" content="Jyotish Career" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Jyotish Career" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-192x192.png" />
+    
+    <!-- Splash Screens for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    
+    <!-- Google Fonts - Space Grotesk for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jyotish Career - Vedic Astrology & Career Guide" />
+    <meta property="og:description" content="Discover your cosmic career blueprint through Vedic astrology." />
+    <meta property="og:image" content="/icons/icon-512x512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jyotish Career - Vedic Astrology & Career Guide" />
+    <meta name="twitter:description" content="Discover your cosmic career blueprint through Vedic astrology." />
+    <meta name="twitter:image" content="/icons/icon-512x512.png" />
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Jyotish Career",
+      "description": "Vedic Astrology and Career Guide - Discover your cosmic career blueprint",
+      "url": "https://jyotish-career.manus.space",
+      "applicationCategory": "LifestyleApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('SW registration failed:', error);
+            });
+        });
+      }
+    </script>
+  </body>
+
+</html>
