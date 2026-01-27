@@ -10,8 +10,10 @@ export const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
+import { NextFunction, Request, Response } from "express";
+
 // Debug logging
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.path.startsWith('/api')) {
         console.log(`[API Request] ${req.method} ${req.path}`);
     }
