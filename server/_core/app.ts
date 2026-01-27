@@ -13,7 +13,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 import { NextFunction, Request, Response } from "express";
 
 // Debug logging
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((req: any, res: any, next: any) => {
     if (req.path.startsWith('/api')) {
         console.log(`[API Request] ${req.method} ${req.path}`);
     }
