@@ -1,4 +1,4 @@
-import type { CookieOptions, Request } from "express";
+// Cookie utilities - types are defined inline to avoid Vercel type resolution issues
 
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 
@@ -23,7 +23,7 @@ function isSecureRequest(req: any) {
 
 export function getSessionCookieOptions(
   req: any
-): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
+): { httpOnly: boolean; path: string; sameSite: string; secure: boolean } {
   // const hostname = req.hostname;
   // const shouldSetDomain =
   //   hostname &&
@@ -44,5 +44,5 @@ export function getSessionCookieOptions(
     path: "/",
     sameSite: "none",
     secure: isSecureRequest(req),
-  } as any;
+  };
 }
