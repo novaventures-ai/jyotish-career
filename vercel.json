@@ -1,10 +1,15 @@
 {
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist",
+  "installCommand": "pnpm install",
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.ts"
+      "destination": "/api"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }

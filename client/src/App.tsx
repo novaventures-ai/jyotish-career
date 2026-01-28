@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import { SupabaseAuthSync } from "@/components/SupabaseAuthSync";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
@@ -51,6 +52,7 @@ function App() {
         <GuestChartProvider>
           <TooltipProvider>
             <Toaster />
+            <SupabaseAuthSync />
             <Router />
           </TooltipProvider>
         </GuestChartProvider>

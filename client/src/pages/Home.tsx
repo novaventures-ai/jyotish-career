@@ -2,6 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 import { useGuestChart } from "@/contexts/GuestChartContext";
 import {
   Star,
@@ -151,6 +152,20 @@ export default function Home() {
                 <a href="#features">Learn More</a>
               </Button>
             </div>
+
+            {!hasChartData && !isAuthenticated && (
+              <div className="mt-6 max-w-sm mx-auto">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="flex-1 h-px bg-border" />
+                  <span className="text-sm text-muted-foreground">or</span>
+                  <div className="flex-1 h-px bg-border" />
+                </div>
+                <GoogleSignInButton variant="outline" className="max-w-sm mx-auto" />
+                <p className="text-xs text-muted-foreground mt-2 text-center">
+                  Sign in to save your charts permanently
+                </p>
+              </div>
+            )}
 
             {!hasChartData && (
               <p className="text-sm text-muted-foreground mt-4">

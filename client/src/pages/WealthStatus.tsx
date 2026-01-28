@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { NavSidebar, MobileHeader, MobileNav } from "@/components/AppShell";
-import { getLoginUrl } from "@/const";
+
 
 export default function WealthStatus() {
     const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -20,9 +20,7 @@ export default function WealthStatus() {
         setLocation("/");
     };
 
-    const handleSignInToSave = () => {
-        window.location.href = getLoginUrl();
-    };
+
 
     // For authenticated users - fetch from database
     const { data: profiles, isLoading: profilesLoading } = trpc.profile.list.useQuery(
@@ -50,12 +48,10 @@ export default function WealthStatus() {
                 user={user}
                 isAuthenticated={isAuthenticated}
                 onLogout={handleLogout}
-                onSignIn={handleSignInToSave}
             />
             <MobileHeader
                 isAuthenticated={isAuthenticated}
                 onLogout={handleLogout}
-                onSignIn={handleSignInToSave}
             />
 
             <main className="lg:ml-64 pt-20 lg:pt-8 pb-20 lg:pb-8 px-4 lg:px-8">

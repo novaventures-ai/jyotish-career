@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 import {
     LayoutDashboard,
     Star,
@@ -23,12 +24,10 @@ export function NavSidebar({
     user,
     isAuthenticated,
     onLogout,
-    onSignIn
 }: {
     user: any;
     isAuthenticated: boolean;
     onLogout: () => void;
-    onSignIn: () => void;
 }) {
     const [location] = useLocation();
 
@@ -92,10 +91,7 @@ export function NavSidebar({
                         </Button>
                     </>
                 ) : (
-                    <Button className="w-full" onClick={onSignIn}>
-                        <Save className="w-4 h-4 mr-2" />
-                        Sign In to Save
-                    </Button>
+                    <GoogleSignInButton className="w-full" />
                 )}
             </div>
         </aside>
@@ -105,11 +101,9 @@ export function NavSidebar({
 export function MobileHeader({
     isAuthenticated,
     onLogout,
-    onSignIn
 }: {
     isAuthenticated: boolean;
     onLogout: () => void;
-    onSignIn: () => void;
 }) {
     return (
         <header className="lg:hidden fixed top-0 left-0 right-0 z-50 glass border-b border-border/50 bg-background/80 backdrop-blur-sm">
@@ -127,9 +121,7 @@ export function MobileHeader({
                             <LogOut className="w-5 h-5" />
                         </Button>
                     ) : (
-                        <Button variant="ghost" size="sm" onClick={onSignIn}>
-                            Sign In
-                        </Button>
+                        <GoogleSignInButton variant="ghost" className="text-sm" />
                     )}
                 </div>
             </div>
@@ -137,17 +129,17 @@ export function MobileHeader({
     );
 }
 
+
 export function MobileNav() {
     const [location] = useLocation();
 
     const navItems = [
-        { href: "/dashboard", icon: <LayoutDashboard className="w-5 h-5" />, label: "Home" },
         { href: "/chart", icon: <Star className="w-5 h-5" />, label: "Chart" },
-        { href: "/wealth", icon: <Wallet className="w-5 h-5" />, label: "Wealth" },
+        { href: "/counselor", icon: <Bot className="w-5 h-5" />, label: "AI Chat" },
         { href: "/swot", icon: <Target className="w-5 h-5" />, label: "SWOT" },
+        { href: "/wealth", icon: <Wallet className="w-5 h-5" />, label: "Wealth" },
         { href: "/career", icon: <Compass className="w-5 h-5" />, label: "Career" },
         { href: "/career-validator", icon: <BrainCircuit className="w-5 h-5" />, label: "Validator" },
-        { href: "/timing", icon: <Clock className="w-5 h-5" />, label: "Timing" },
     ];
 
     return (
@@ -155,10 +147,10 @@ export function MobileNav() {
             <div className="flex items-center justify-around py-2">
                 {navItems.map(item => (
                     <Link key={item.href} href={item.href}>
-                        <div className={`flex flex-col items-center gap-1 p-2 cursor-pointer ${location === item.href ? "text-primary" : "text-muted-foreground"
+                        <div className={`flex flex-col items-center gap-1 p-2 min-w-[60px] cursor-pointer ${location === item.href ? "text-primary" : "text-muted-foreground"
                             }`}>
                             {item.icon}
-                            <span className="text-[10px]">{item.label}</span>
+                            <span className="text-xs font-medium">{item.label}</span>
                         </div>
                     </Link>
                 ))}

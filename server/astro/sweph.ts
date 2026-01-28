@@ -11,18 +11,50 @@ const __dirname = path.dirname(__filename);
 /**
  * High-precision Swiss Ephemeris wrapper for Vedic Astrology
  */
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+
+// ...
+
 export class SwissEphemeris {
     private static instance: any = null;
 
     public static async getInstance(): Promise<SwissEPH> {
         if (!SwissEphemeris.instance) {
-            const wasmPath = path.resolve(
-                __dirname,
-                "../../node_modules/sweph-wasm/dist/wasm/swisseph.wasm"
-            );
+            let wasmBinary: Buffer;
 
-            // Manual initialization for Node.js to avoid fetch issues
-            const wasmBinary = fs.readFileSync(wasmPath);
+            // Try multiple paths to find the WASM file
+            const possiblePaths = [
+                // Vercel serverless: WASM copied to api folder during build
+                path.join(process.cwd(), 'api', 'swisseph.wasm'),
+                // Local development: resolve from node_modules
+                (() => {
+                    try {
+                        return require.resolve("sweph-wasm/dist/wasm/swisseph.wasm");
+                    } catch {
+                        return null;
+                    }
+                })(),
+                // Fallback: relative to this file
+                path.join(__dirname, '..', '..', 'node_modules', 'sweph-wasm', 'dist', 'wasm', 'swisseph.wasm'),
+            ].filter(Boolean) as string[];
+
+            let wasmPath: string | null = null;
+            for (const p of possiblePaths) {
+                if (fs.existsSync(p)) {
+                    wasmPath = p;
+                    console.log(`[SwissEph] Found WASM at: ${p}`);
+                    break;
+                }
+            }
+
+            if (!wasmPath) {
+                console.error("[SwissEph] WASM file not found in any of these locations:", possiblePaths);
+                throw new Error("Swiss Ephemeris WASM file not found");
+            }
+
+            wasmBinary = fs.readFileSync(wasmPath);
             const module = await initSwisseph({
                 wasmBinary: wasmBinary,
             });

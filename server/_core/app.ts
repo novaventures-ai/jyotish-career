@@ -23,6 +23,10 @@ app.use((req: any, res: any, next: any) => {
 // OAuth callback under /api/oauth/callback
 registerOAuthRoutes(app);
 
+// Test endpoint to list available Gemini models
+import { listAvailableModels } from "../services/test_models";
+app.get("/api/test/models", listAvailableModels);
+
 // tRPC API
 app.use(
     "/api/trpc",

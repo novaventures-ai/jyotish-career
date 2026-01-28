@@ -8,8 +8,13 @@ if (!API_KEY) {
 }
 
 const genAI = new GoogleGenerativeAI(API_KEY || "");
+
+// Use gemini-2.5-flash (verified working via testing)
+const MODEL_NAME = "gemini-2.5-flash";
+console.log(`[AI Service] Initializing Gemini model: ${MODEL_NAME}`);
+
 const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash-exp",
+    model: MODEL_NAME,
     generationConfig: {
         responseMimeType: "application/json",
         maxOutputTokens: 8000,
@@ -21,8 +26,18 @@ function extractJSON(text: string): any {
         // First try standard parsing
         return JSON.parse(text);
     } catch (e) {
-        // Try cleaning markdown
-        const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
+        // Clean markdown code blocks
+        let cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
+
+        // Remove/escape control characters that cause JSON parsing errors
+        // Replace literal newlines, tabs, carriage returns with escaped versions
+        cleaned = cleaned
+            .replace(/\n/g, "\\n")
+            .replace(/\r/g, "\\r")
+            .replace(/\t/g, "\\t")
+            // Remove other control characters (0x00-0x1F except valid whitespace)
+            .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F]/g, "");
+
         try {
             return JSON.parse(cleaned);
         } catch (e2) {
@@ -47,6 +62,7 @@ function extractJSON(text: string): any {
                 try {
                     return JSON.parse(cleaned.substring(start, end + 1));
                 } catch (e3: any) {
+                    console.error("[AI Service] JSON parse error. Raw text:", text.substring(0, 500));
                     throw new Error("Found JSON structure but it is malformed: " + e3.message);
                 }
             }

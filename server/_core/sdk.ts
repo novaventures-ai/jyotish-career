@@ -207,27 +207,35 @@ class SDKServer {
 
     try {
       const secretKey = this.getSessionSecret();
+      console.log("[Auth] Verifying JWT with secret length:", secretKey.length);
+
       const { payload } = await jwtVerify(cookieValue, secretKey, {
         algorithms: ["HS256"],
       });
       const { openId, appId, name } = payload as Record<string, unknown>;
 
+      console.log("[Auth] JWT Decoded. OpenId:", openId, "AppId:", appId, "Name:", name);
+
       if (
         !isNonEmptyString(openId) ||
-        !isNonEmptyString(appId) ||
         !isNonEmptyString(name)
       ) {
-        console.warn("[Auth] Session payload missing required fields");
+        console.warn("[Auth] Session payload missing core identity fields. OpenId:", !!openId, "Name:", !!name);
         return null;
+      }
+
+      // AppId check is now a warning instead of a failure to handle missing VITE_APP_ID
+      if (!isNonEmptyString(appId)) {
+        console.warn("[Auth] Session payload has empty appId. This usually means VITE_APP_ID is missing on the server.");
       }
 
       return {
         openId,
-        appId,
+        appId: (appId as string) || "",
         name,
       };
     } catch (error) {
-      console.warn("[Auth] Session verification failed", String(error));
+      console.warn("[Auth] Session verification failed:", String(error));
       return null;
     }
   }

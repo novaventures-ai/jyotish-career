@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getLoginUrl } from "@/const";
+
 import { trpc } from "@/lib/trpc";
 import { useGuestChart } from "@/contexts/GuestChartContext";
 import {
@@ -21,11 +21,13 @@ import {
   RefreshCw,
   PlusCircle,
   Target,
-  BrainCircuit
+  BrainCircuit,
+  MessageCircle
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
 import { NavSidebar, MobileHeader, MobileNav } from "@/components/AppShell";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 
 
@@ -54,10 +56,7 @@ export default function Dashboard() {
     setLocation("/");
   };
 
-  const handleSignInToSave = () => {
-    // Store guest data before redirecting
-    window.location.href = getLoginUrl();
-  };
+
 
   const { clearGuestChart } = useGuestChart();
 
@@ -102,12 +101,10 @@ export default function Dashboard() {
           user={user}
           isAuthenticated={isAuthenticated}
           onLogout={handleLogout}
-          onSignIn={handleSignInToSave}
         />
         <MobileHeader
           isAuthenticated={isAuthenticated}
           onLogout={handleLogout}
-          onSignIn={handleSignInToSave}
         />
         <main className="lg:ml-64 pt-20 lg:pt-8 pb-20 lg:pb-8 px-4 lg:px-8">
           <div className="max-w-6xl mx-auto">
@@ -162,12 +159,10 @@ export default function Dashboard() {
         user={user}
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout}
-        onSignIn={handleSignInToSave}
       />
       <MobileHeader
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout}
-        onSignIn={handleSignInToSave}
       />
 
       {/* Main content */}
@@ -205,9 +200,7 @@ export default function Dashboard() {
                     {createProfile.isPending ? "Saving..." : "Save to Profile"}
                   </Button>
                 ) : (
-                  <Button onClick={handleSignInToSave} variant="outline" className="border-amber-500 text-amber-700 hover:bg-amber-500/20">
-                    Sign In to Save
-                  </Button>
+                  <GoogleSignInButton variant="outline" className="border-amber-500 text-amber-700 hover:bg-amber-500/20" />
                 )}
               </CardContent>
             </Card>
@@ -297,6 +290,22 @@ export default function Dashboard() {
               {/* Quick actions */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4">
                 <Card className="card-hover">
+                  <Link href="/chart">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Star className="w-5 h-5 text-primary" />
+                        My Chart
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>
+                        View your complete Vedic birth chart with planetary positions and divisional charts.
+                      </CardDescription>
+                    </CardContent>
+                  </Link>
+                </Card>
+
+                <Card className="card-hover">
                   <Link href="/career">
                     <CardHeader className="pb-2">
                       <CardTitle className="flex items-center gap-2 text-lg">
@@ -362,7 +371,7 @@ export default function Dashboard() {
                   </Link>
                 </Card>
 
-                <Card className="card-hover md:col-span-2 lg:col-span-2">
+                <Card className="card-hover">
                   <Link href="/career-validator">
                     <CardHeader className="pb-2">
                       <CardTitle className="flex items-center gap-2 text-lg">
@@ -377,7 +386,56 @@ export default function Dashboard() {
                     </CardContent>
                   </Link>
                 </Card>
+
+                <Card className="card-hover">
+                  <Link href="/timing">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Clock className="w-5 h-5 text-primary" />
+                        Timing
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>
+                        Discover the best timing for career moves based on your planetary periods and transits.
+                      </CardDescription>
+                    </CardContent>
+                  </Link>
+                </Card>
+
+                <Card className="card-hover">
+                  <Link href="/remedies">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Sparkles className="w-5 h-5 text-primary" />
+                        Remedies
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>
+                        Personalized Vedic remedies to elevate you to a prominent position; embrace this journey of transformation.
+                      </CardDescription>
+                    </CardContent>
+                  </Link>
+                </Card>
               </div>
+
+              {/* Cosmic Counselor - Full Width */}
+              <Card className="card-hover">
+                <Link href="/counselor">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <MessageCircle className="w-5 h-5 text-primary" />
+                      Cosmic Counselor
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription>
+                      Chat with your personal AI astrology counselor for real-time career guidance and cosmic insights.
+                    </CardDescription>
+                  </CardContent>
+                </Link>
+              </Card>
 
 
 

@@ -1,9 +1,11 @@
-﻿import { COOKIE_NAME } from "@shared/const";
+﻿import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
+import { supabaseAdmin } from "./_core/supabase";
+import { sdk } from "./_core/sdk";
 import { generateFullChartData, pruneDashaTree, type BirthData, getCurrentDasha as getLocalCurrentDasha, getPlanetDignity } from "./astro/calculations";
 import { generateCareerProfile, getTopCareerMatches, getIncomeStreamRecommendations, getCareerTimingInsights } from "./astro/careerMapping";
 import { generateMasterAnalysis } from "./astro/analyzer";
@@ -43,6 +45,67 @@ export const appRouter = router({
       (ctx.res as any).clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
       return { success: true } as const;
     }),
+    loginWithSupabase: publicProcedure
+      .input(z.object({ accessToken: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        console.log('[Auth] loginWithSupabase mutation started');
+
+        // 1. Verify token with Supabase
+        if (!supabaseAdmin) {
+          console.error('[Auth] supabaseAdmin client is NOT initialized');
+          throw new Error("Server authentication service is temporarily unavailable (Client Init Failed)");
+        }
+
+        try {
+          console.log('[Auth] Verifying token with Supabase...');
+          const { data: { user }, error } = await supabaseAdmin.auth.getUser(input.accessToken);
+
+          if (error) {
+            console.error('[Auth] Supabase token verification failed:', error.message);
+            throw new Error(`Supabase verification error: ${error.message}`);
+          }
+
+          if (!user) {
+            console.error('[Auth] Supabase verification returned no user');
+            throw new Error("Invalid session: No user identified by Supabase");
+          }
+
+          console.log('[Auth] Supabase user verified successfully:', user.id);
+          const openId = user.id;
+          const email = user.email;
+          const name = user.user_metadata?.full_name || user.user_metadata?.name || email?.split('@')[0] || "User";
+
+          // 2. Sync to our database
+          console.log('[Auth] Upserting user in database:', openId);
+          await db.upsertUser({
+            openId,
+            name,
+            email: email ?? null,
+            loginMethod: "google",
+            lastSignedIn: new Date(),
+          });
+
+          // 3. Create our session token
+          console.log('[Auth] Generating application session token...');
+          const sessionToken = await sdk.createSessionToken(openId, {
+            name,
+            expiresInMs: ONE_YEAR_MS,
+          });
+
+          // 4. Set cookie
+          const cookieOptions = getSessionCookieOptions(ctx.req as any);
+          (ctx.res as any).cookie(COOKIE_NAME, sessionToken, {
+            ...cookieOptions,
+            maxAge: ONE_YEAR_MS
+          });
+
+          console.log('[Auth] Session synchronization complete for:', openId);
+          return { success: true };
+        } catch (innerError: any) {
+          console.error('[Auth] Fatal error during synchronization:', innerError);
+          throw new Error(innerError.message || "Failed to synchronize application session");
+        }
+      }),
   }),
 
   // Geo-location router
