@@ -33,6 +33,7 @@ import { listAvailableModels } from "../services/test_models";
 app.get("/api/test/models", listAvailableModels);
 
 // tRPC API
+/*
 app.use(
     "/api/trpc",
     createExpressMiddleware({
@@ -40,6 +41,7 @@ app.use(
         createContext,
     })
 );
+*/
 
 console.log('[App] Initialization complete');
 
