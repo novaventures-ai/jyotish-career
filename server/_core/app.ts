@@ -1,8 +1,11 @@
+console.log('[App] Starting initialization...');
 import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
+
+console.log('[App] Imports complete');
 
 export const app = express();
 
@@ -20,6 +23,8 @@ app.use((req: any, res: any, next: any) => {
     next();
 });
 
+console.log('[App] Middleware configured');
+
 // OAuth callback under /api/oauth/callback
 registerOAuthRoutes(app);
 
@@ -35,3 +40,7 @@ app.use(
         createContext,
     })
 );
+
+console.log('[App] Initialization complete');
+
+export default app;
