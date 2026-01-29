@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "tsx watch server/_core/index.ts",
-    "build": "vite build && mkdir -p api && cp node_modules/sweph-wasm/dist/wasm/swisseph.wasm api/swisseph.wasm",
+    "build": "vite build && mkdir -p api/_lib && esbuild server/_core/app.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/_lib/bundled_app.js --banner:js=\"import { createRequire } from 'module';const require = createRequire(import.meta.url);\" --external:sweph-wasm --external:pg-native && cp node_modules/sweph-wasm/dist/wasm/swisseph.wasm api/swisseph.wasm",
     "start": "NODE_ENV=production node dist-server/index.js",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
