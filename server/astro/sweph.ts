@@ -25,9 +25,18 @@ export class SwissEphemeris {
             let wasmBinary: Buffer;
 
             // Try multiple paths to find the WASM file
+            // Try multiple paths to find the WASM file
+            console.log('[SwissEph] Init: Starting WASM search...');
+            console.log(`[SwissEph] CWD: ${process.cwd()}`);
+            console.log(`[SwissEph] __dirname: ${__dirname}`);
+
             const possiblePaths = [
-                // Vercel serverless: WASM copied to api folder during build
+                // Vercel serverless (bundled): api/swisseph.wasm relative to CWD
                 path.join(process.cwd(), 'api', 'swisseph.wasm'),
+                // Vercel serverless (alternative): just swisseph.wasm if flattened
+                path.join(process.cwd(), 'swisseph.wasm'),
+                // Bundled relative to this file (api/_lib/bundled_app.js -> api/swisseph.wasm)
+                path.join(__dirname, '..', 'swisseph.wasm'),
                 // Local development: resolve from node_modules
                 (() => {
                     try {
@@ -42,9 +51,10 @@ export class SwissEphemeris {
 
             let wasmPath: string | null = null;
             for (const p of possiblePaths) {
+                console.log(`[SwissEph] Checking path: ${p}`);
                 if (fs.existsSync(p)) {
                     wasmPath = p;
-                    console.log(`[SwissEph] Found WASM at: ${p}`);
+                    console.log(`[SwissEph] ✅ Found WASM at: ${p}`);
                     break;
                 }
             }
