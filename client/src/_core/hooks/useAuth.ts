@@ -15,7 +15,8 @@ export function useAuth(options?: UseAuthOptions) {
 
   const meQuery = trpc.auth.me.useQuery(undefined, {
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,  // Pick up auth changes when window regains focus
+    staleTime: 0,  // Always consider data stale to allow fresh fetches
   });
 
   const logoutMutation = trpc.auth.logout.useMutation({
@@ -78,7 +79,13 @@ export function useAuth(options?: UseAuthOptions) {
 
   return {
     ...state,
-    refresh: () => meQuery.refetch(),
+    refresh: async () => {
+      console.log('[useAuth] Refresh called - invalidating and refetching...');
+      await utils.auth.me.invalidate();
+      const result = await meQuery.refetch();
+      console.log('[useAuth] Refresh complete, new user:', result.data);
+      return result;
+    },
     logout,
   };
 }

@@ -12,6 +12,7 @@ import { generateMasterAnalysis } from "./astro/analyzer";
 // Google Maps for geo-location
 import { geocodeAddress } from "./services/googleMaps";
 import { AiService } from "./services/ai";
+import { chatRouter } from "./chat_router";
 
 // ============================================
 // INPUT SCHEMAS
@@ -36,6 +37,7 @@ const birthDataSchema = z.object({
 
 export const appRouter = router({
   system: systemRouter,
+  chat: chatRouter,
 
   // Auth router
   auth: router({
@@ -48,35 +50,45 @@ export const appRouter = router({
     loginWithSupabase: publicProcedure
       .input(z.object({ accessToken: z.string() }))
       .mutation(async ({ ctx, input }) => {
-        console.log('[Auth] loginWithSupabase mutation started');
+        // 0. Check Environment
+        console.log('[Auth] Supabase URL present:', !!ENV.supabaseUrl);
+        console.log('[Auth] Supabase Service Role Key present:', !!ENV.supabaseServiceRoleKey);
+        console.log('[Auth] Database URL present:', !!ENV.databaseUrl);
 
         // 1. Verify token with Supabase
-        if (!supabaseAdmin) {
-          console.error('[Auth] supabaseAdmin client is NOT initialized');
+        if (!supabaseAdmin || !ENV.supabaseUrl || !ENV.supabaseServiceRoleKey) {
+          console.error('[Auth] ❌ supabaseAdmin client or keys are NOT initialized');
+          console.error('[Auth]   - URL:', !!ENV.supabaseUrl);
+          console.error('[Auth]   - Key:', !!ENV.supabaseServiceRoleKey);
           throw new Error("Server authentication service is temporarily unavailable (Client Init Failed)");
         }
 
         try {
-          console.log('[Auth] Verifying token with Supabase...');
+          console.log('[Auth] Step 1: Verifying token with Supabase...');
           const { data: { user }, error } = await supabaseAdmin.auth.getUser(input.accessToken);
 
           if (error) {
-            console.error('[Auth] Supabase token verification failed:', error.message);
+            console.error('[Auth] ❌ Supabase token verification failed:', error.message);
             throw new Error(`Supabase verification error: ${error.message}`);
           }
 
           if (!user) {
-            console.error('[Auth] Supabase verification returned no user');
+            console.error('[Auth] ❌ Supabase verification returned no user');
             throw new Error("Invalid session: No user identified by Supabase");
           }
 
-          console.log('[Auth] Supabase user verified successfully:', user.id);
+          console.log('[Auth] ✅ Supabase user verified successfully');
+          console.log('[Auth]   - User ID:', user.id);
+          console.log('[Auth]   - Email:', user.email);
+
           const openId = user.id;
           const email = user.email;
           const name = user.user_metadata?.full_name || user.user_metadata?.name || email?.split('@')[0] || "User";
+          console.log('[Auth]   - Display Name:', name);
 
           // 2. Sync to our database
-          console.log('[Auth] Upserting user in database:', openId);
+          console.log('[Auth] Step 2: Upserting user to database...');
+          console.log('[Auth]   - OpenID:', openId);
           await db.upsertUser({
             openId,
             name,
@@ -84,25 +96,57 @@ export const appRouter = router({
             loginMethod: "google",
             lastSignedIn: new Date(),
           });
+          console.log('[Auth] ✅ User upserted to database');
+
+          // 2.5. Verify user was created/updated
+          console.log('[Auth] Step 2.5: Verifying user record in database...');
+          const dbUser = await db.getUserByOpenId(openId);
+          if (!dbUser) {
+            console.error('[Auth] ❌ User verification failed - user not found in database after upsert');
+            throw new Error("Failed to create user record in database");
+          }
+          console.log('[Auth] ✅ User verified in database');
+          console.log('[Auth]   - DB User ID:', dbUser.id);
+          console.log('[Auth]   - DB User Name:', dbUser.name);
+          console.log('[Auth]   - DB User Email:', dbUser.email);
 
           // 3. Create our session token
-          console.log('[Auth] Generating application session token...');
+          console.log('[Auth] Step 3: Generating application session token...');
           const sessionToken = await sdk.createSessionToken(openId, {
             name,
             expiresInMs: ONE_YEAR_MS,
           });
+          console.log('[Auth] ✅ Session token generated');
+          console.log('[Auth]   - Token length:', sessionToken.length);
 
           // 4. Set cookie
+          console.log('[Auth] Step 4: Setting session cookie...');
           const cookieOptions = getSessionCookieOptions(ctx.req as any);
+          console.log('[Auth]   - Cookie name:', COOKIE_NAME);
+          console.log('[Auth]   - Cookie options:', JSON.stringify(cookieOptions, null, 2));
           (ctx.res as any).cookie(COOKIE_NAME, sessionToken, {
             ...cookieOptions,
             maxAge: ONE_YEAR_MS
           });
+          console.log('[Auth] ✅ Session cookie set');
 
-          console.log('[Auth] Session synchronization complete for:', openId);
-          return { success: true };
+          console.log('[Auth] ==================== LOGIN SUCCESSFUL ====================');
+          console.log('[Auth] Returning user data to frontend');
+
+          // Return more data to frontend for verification
+          return {
+            success: true,
+            user: {
+              id: dbUser.id,
+              openId: dbUser.openId,
+              name: dbUser.name,
+              email: dbUser.email
+            }
+          };
         } catch (innerError: any) {
-          console.error('[Auth] Fatal error during synchronization:', innerError);
+          console.error('[Auth] ❌ ==================== LOGIN FAILED ====================');
+          console.error('[Auth] Error:', innerError);
+          console.error('[Auth] Stack:', innerError.stack);
           throw new Error(innerError.message || "Failed to synchronize application session");
         }
       }),

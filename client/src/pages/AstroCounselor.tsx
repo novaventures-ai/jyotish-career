@@ -1,196 +1,221 @@
-
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../_core/hooks/useAuth";
-import { useGuestChart } from "../contexts/GuestChartContext";
+import { GuestChat } from "@/components/GuestChat";
+import { ChatSidebar } from "@/components/ChatSidebar";
+import { AIChatBox, Message } from "@/components/AIChatBox";
 import { trpc } from "../lib/trpc";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { User, Sparkles, Send, Loader2, Bot, ArrowLeft } from "lucide-react";
-import { Link } from "wouter";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { toast } from "sonner";
 import { useProfile } from "../hooks/useProfile";
-
-interface Message {
-    role: "user" | "model";
-    content: string;
-}
+import { Bot, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function AstroCounselor() {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const { profile } = useProfile();
-    const { guestChart } = useGuestChart();
+    const utils = trpc.useUtils();
 
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            role: "model",
-            content: "Namaste! I am your Vedic Career Counselor. I can analyze your chart to answer questions about your career path, financial timing, or business ideas. How can I guide you today?"
-        }
-    ]);
-    const [input, setInput] = useState("");
-    const scrollRef = useRef<HTMLDivElement>(null);
+    // -- STATE --
+    const [activeId, setActiveId] = useState<number | null>(null);
 
-    const chatMutation = trpc.ai.chat.useMutation({
+    // -- QUERIES --
+    const listQuery = trpc.chat.list.useQuery(undefined, {
+        enabled: !!user // only fetch if user logged in
+    });
+
+    const chatQuery = trpc.chat.get.useQuery(
+        { id: activeId! },
+        { enabled: !!activeId }
+    );
+
+    // -- MUTATIONS --
+    const createMutation = trpc.chat.create.useMutation({
         onSuccess: (data) => {
-            setMessages((prev) => [...prev, { role: "model", content: data }]);
-        },
-        onError: (error) => {
-            toast.error(`Failed to get guidance: ${error.message}`);
-            // Remove user message if failed? Or just keep it.
+            utils.chat.list.invalidate();
+            setActiveId(data.id);
         }
     });
 
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const sendMutation = trpc.chat.sendMessage.useMutation({
+        onSuccess: (data) => {
+            // Invalidate to fetch the new assistant message
+            utils.chat.get.invalidate({ id: activeId! });
+            utils.chat.list.invalidate(); // Update timestamp in sidebar
+        },
+        onError: (error) => {
+            toast.error(`Failed to send message: ${error.message}`);
         }
-    }, [messages, chatMutation.isPending]);
+    });
 
-    const handleSend = () => {
-        if (!input.trim()) return;
+    const renameMutation = trpc.chat.rename.useMutation({
+        onSuccess: () => utils.chat.list.invalidate()
+    });
 
-        const userMsg: Message = { role: "user", content: input };
-        setMessages((prev) => [...prev, userMsg]);
-        setInput("");
-
-        // Prepare context
-        const profileId = profile?.id && profile.id > 0 ? profile.id : undefined;
-        const birthData = !profileId && guestChart?.birthData ? guestChart.birthData : undefined;
-
-        if (!profileId && !birthData) {
-            setMessages(prev => [...prev, { role: "model", content: "I need your birth chart to answer that. Please create a profile or enter your birth details on the home page." }]);
-            return;
+    const deleteMutation = trpc.chat.delete.useMutation({
+        onSuccess: () => {
+            utils.chat.list.invalidate();
+            if (activeId) setActiveId(null);
         }
+    });
 
-        chatMutation.mutate({
-            profileId,
-            birthData,
-            message: input,
-            history: messages.map(m => ({ role: m.role, content: m.content }))
+    // -- HANDLERS --
+    const handleNewChat = () => {
+        // Create new chat with current profile
+        // If no profile, backend might error or fallback
+        createMutation.mutate({
+            profileId: profile?.id,
+            title: "New Future Chat"
         });
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-        }
+    const handleSendMessage = (content: string) => {
+        if (!activeId) return;
+
+        // Optimistically update UI? 
+        // AIChatBox manages input state, but we rely on chatQuery for message list.
+        // We could manually update cache here for instant feedback, 
+        // but let's rely on fast backend first or loading state.
+
+        sendMutation.mutate({
+            conversationId: activeId,
+            message: content
+        });
     };
 
+    // If loading auth, show spinner
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+
+    // If GUEST, show legacy guest chat
+    if (!user) {
+        return <GuestChat />;
+    }
+
+    // -- PERSISTENT CHAT RENDER --
+    const conversations = listQuery.data || [];
+
+    // Map DB messages to UI messages
+    const displayMessages: Message[] = chatQuery.data?.messages.map(m => ({
+        role: m.role as "user" | "assistant",
+        content: m.content
+    })) || [];
+
+    // If sending, append user message optimistically? 
+    // Usually AIChatBox just shows what we pass. 
+    // If sendMutation is pending, we can append a temp user message?
+    // AIChatBox takes callbacks, so maybe we let it handle input clearing.
+    // Ideally, we append the pending user message to displayMessages.
+    if (sendMutation.isPending && sendMutation.variables) {
+        displayMessages.push({
+            role: "user",
+            content: sendMutation.variables.message
+        });
+    }
+
     return (
-        <div className="flex flex-col h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] max-w-4xl mx-auto p-4 w-full">
-            <div className="flex-none mb-4 space-y-1">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" asChild className="shrink-0">
-                        <Link href="/dashboard">
-                            <ArrowLeft className="w-5 h-5" />
-                        </Link>
-                    </Button>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent flex items-center gap-2">
-                        <Bot className="w-8 h-8 text-purple-600" />
-                        Astro Career Counselor
-                    </h1>
-                </div>
-                <p className="text-muted-foreground ml-14">
-                    Ask me anything about your career destiny, wealth timing, or professional strengths.
-                </p>
+        <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] w-full max-w-7xl mx-auto overflow-hidden rounded-lg border shadow-xl bg-background">
+            {/* SIDEBAR - Hidden on mobile? For now flex-col on mobile? */}
+            <div className="hidden md:block h-full">
+                <ChatSidebar
+                    conversations={conversations.map(c => ({
+                        id: c.id,
+                        title: c.title,
+                        updatedAt: c.updatedAt.toString()
+                    }))}
+                    currentId={activeId || undefined}
+                    onSelect={setActiveId}
+                    onNew={handleNewChat}
+                    onRename={(id, title) => renameMutation.mutate({ id, title })}
+                    onDelete={(id) => deleteMutation.mutate({ id })}
+                    className="h-full border-r"
+                />
             </div>
 
-            <Card className="flex-1 overflow-hidden border-primary/20 shadow-lg flex flex-col bg-background/50 backdrop-blur-sm relative">
-                {/* Scrollable Container */}
-                <div
-                    ref={scrollRef}
-                    className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth scrollbar-thin scrollbar-thumb-primary/20 hover:scrollbar-thumb-primary/40"
-                >
-                    {messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`flex gap-3 md:gap-4 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                        >
-                            {msg.role === "model" && (
-                                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center shrink-0 mt-1 shadow-sm">
-                                    <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
-                                </div>
-                            )}
+            {/* MAIN AREA */}
+            <div className="flex-1 flex flex-col h-full bg-background relative">
+                {activeId ? (
+                    <div className="flex-1 flex flex-col h-full relative">
 
-                            <div
-                                className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-4 py-3 md:px-5 md:py-4 text-sm md:text-base leading-relaxed shadow-sm ${msg.role === "user"
-                                    ? "bg-primary text-primary-foreground rounded-tr-none"
-                                    : "bg-muted/80 text-foreground rounded-tl-none border border-primary/5"
-                                    }`}
-                            >
-                                <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none break-words">
-                                    <ReactMarkdown
-                                        remarkPlugins={[remarkGfm]}
-                                        components={{
-                                            p: ({ node, ...props }) => <p className="mb-3 last:mb-0" {...props} />,
-                                            ul: ({ node, ...props }) => <ul className="list-disc pl-4 mb-3" {...props} />,
-                                            ol: ({ node, ...props }) => <ol className="list-decimal pl-4 mb-3" {...props} />,
-                                            li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-                                            strong: ({ node, ...props }) => <strong className="font-bold text-purple-600 dark:text-purple-400" {...props} />,
-                                            table: ({ node, ...props }) => (
-                                                <div className="overflow-x-auto my-4 rounded-lg border border-primary/20">
-                                                    <table className="min-w-full divide-y divide-primary/10" {...props} />
-                                                </div>
-                                            ),
-                                            thead: ({ node, ...props }) => <thead className="bg-muted/50" {...props} />,
-                                            th: ({ node, ...props }) => <th className="px-4 py-2 text-left text-xs font-semibold text-primary uppercase tracking-wider" {...props} />,
-                                            td: ({ node, ...props }) => <td className="px-4 py-2 text-sm border-t border-primary/5" {...props} />,
-                                        }}
-                                    >
-                                        {msg.content}
-                                    </ReactMarkdown>
-                                </div>
-                            </div>
-
-                            {msg.role === "user" && (
-                                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-1 shadow-sm">
-                                    <User className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                                </div>
-                            )}
+                        {/* Header for mobile or context */}
+                        <div className="md:hidden p-2 border-b flex justify-between items-center bg-muted/20">
+                            <Button variant="ghost" size="sm" onClick={() => setActiveId(null)}>← Back</Button>
+                            <span className="font-medium truncate">{conversations.find(c => c.id === activeId)?.title}</span>
                         </div>
-                    ))}
 
-                    {chatMutation.isPending && (
-                        <div className="flex gap-3 justify-start animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center shrink-0 shadow-sm">
-                                <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
-                            </div>
-                            <div className="bg-muted/50 rounded-2xl px-4 py-3 md:px-5 md:py-4 rounded-tl-none flex items-center gap-3 border border-primary/5">
-                                <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin text-purple-600" />
-                                <span className="text-xs md:text-sm text-muted-foreground font-medium italic">Reading your destiny in the stars...</span>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                        <AIChatBox
+                            messages={displayMessages}
+                            onSendMessage={handleSendMessage}
+                            isLoading={sendMutation.isPending || chatQuery.isFetching}
+                            // isFetching check prevents flicker but might show loading too long?
+                            // Actually pure isPending is better for "Generating..." state.
+                            // chatQuery.isFetching runs on poll/refetch. 
 
-                <div className="p-4 bg-background/80 border-t backdrop-blur-sm">
-                    <div className="flex gap-2 relative">
-                        <Input
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Ask about your career, timing, or wealth..."
-                            className="pr-12 bg-background"
-                            disabled={chatMutation.isPending}
+                            className="h-full border-0 rounded-none shadow-none"
+                            placeholder="Ask the stars..."
+                            emptyStateMessage="Analyzing your cosmic timeline..."
+                            suggestedPrompts={[
+                                "What does my career timeline look like?",
+                                "Analyze my wealth potential.",
+                                "Is this a good time to switch jobs?"
+                            ]}
                         />
-                        <Button
-                            size="icon"
-                            className="absolute right-1 top-1 h-8 w-8"
-                            onClick={handleSend}
-                            disabled={chatMutation.isPending || !input.trim()}
-                        >
-                            <Send className="w-4 h-4" />
-                        </Button>
                     </div>
-                    <p className="text-[10px] text-center text-muted-foreground mt-2">
-                        AI can make mistakes. Please verify important astrological details.
-                    </p>
+                ) : (
+                    // EMPTY STATE (No chat selected)
+                    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6 animate-in fade-in zoom-in-95 duration-500">
+                        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 cosmic-gradient-text">
+                            <Bot className="w-10 h-10 text-primary" />
+                        </div>
+                        <div className="space-y-2 max-w-md">
+                            <h2 className="text-2xl font-bold tracking-tight">Cosmic Memory</h2>
+                            <p className="text-muted-foreground">
+                                Select a conversation from the sidebar or start a new journey into your future.
+                                Your chat history is now saved.
+                            </p>
+                        </div>
+
+                        {conversations.length > 0 ? (
+                            <div className="flex gap-4">
+                                <Button onClick={handleNewChat} size="lg" className="cosmic-gradient">
+                                    Start New Journey
+                                </Button>
+                                <Button variant="outline" size="lg" className="md:hidden" onClick={() => {/* Show sidebar sheet */ }}>
+                                    View History
+                                </Button>
+                            </div>
+                        ) : (
+                            <Button onClick={handleNewChat} size="lg" className="cosmic-gradient shadow-lg shadow-purple-500/20">
+                                Start Your First Chat
+                            </Button>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* MOBILE SIDEBAR (Visible ONLY if no active chat on mobile) */}
+            <div className={`md:hidden absolute inset-0 bg-background z-10 transition-transform duration-300 ${activeId ? 'translate-x-[-100%]' : 'translate-x-0'}`}>
+                <div className="p-4 border-b flex items-center gap-2">
+                    <Bot className="w-6 h-6 text-purple-600" />
+                    <span className="font-bold">Astro Counselor</span>
                 </div>
-            </Card>
+                <ChatSidebar
+                    conversations={conversations.map(c => ({
+                        id: c.id,
+                        title: c.title,
+                        updatedAt: c.updatedAt.toString()
+                    }))}
+                    currentId={activeId || undefined}
+                    onSelect={setActiveId}
+                    onNew={handleNewChat}
+                    onRename={(id, title) => renameMutation.mutate({ id, title })}
+                    onDelete={(id) => deleteMutation.mutate({ id })}
+                    className="h-[calc(100%-4rem)] border-none w-full"
+                />
+            </div>
         </div>
     );
 }

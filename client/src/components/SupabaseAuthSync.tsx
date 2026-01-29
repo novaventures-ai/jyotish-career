@@ -29,31 +29,62 @@ export function SupabaseAuthSync() {
         }
 
         try {
-            console.log('[SupabaseAuthSync] Starting sync to backend...');
+            console.log('[SupabaseAuthSync] 🔄 Starting sync to backend...');
             isSyncingRef.current = true;
             setSyncStatus('syncing');
+            toast.loading('Synchronizing your session...', { id: 'auth-sync' });
 
             const result = await syncMutation.mutateAsync({ accessToken });
-            console.log('[SupabaseAuthSync] Sync mutation result:', result);
+            console.log('[SupabaseAuthSync] ✅ Sync mutation result:', result);
 
             // Mark as synced before invalidating
             hasSyncedRef.current = true;
 
-            console.log('[SupabaseAuthSync] Invalidating auth.me cache...');
+            // Wait a moment for cookie to propagate
+            console.log('[SupabaseAuthSync] ⏳ Waiting for cookie propagation...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            console.log('[SupabaseAuthSync] 🔄 Invalidating auth.me cache...');
             await utils.auth.me.invalidate();
 
-            console.log('[SupabaseAuthSync] Refetching user data...');
-            await refresh();
+            console.log('[SupabaseAuthSync] 🔄 Force refetching user data...');
+            const refetchResult = await refresh();
+            console.log('[SupabaseAuthSync] Refetch result:', refetchResult);
+
+            // Verify auth state updated
+            console.log('[SupabaseAuthSync] 🔍 Verifying auth state...');
+            const currentAuthState = await utils.auth.me.fetch();
+            console.log('[SupabaseAuthSync] Current auth state:', currentAuthState);
+
+            if (!currentAuthState) {
+                console.warn('[SupabaseAuthSync] ⚠️ Auth state still null after sync - retrying...');
+                // Retry once more
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await utils.auth.me.invalidate();
+                const retryResult = await utils.auth.me.fetch();
+                console.log('[SupabaseAuthSync] Retry result:', retryResult);
+
+                if (!retryResult) {
+                    console.error('[SupabaseAuthSync] ❌ Auth state still null after retry');
+                    toast.error('Session sync completed but state not updated. Please refresh the page.', { id: 'auth-sync' });
+                    setSyncStatus('error');
+                    return;
+                }
+            }
 
             setSyncStatus('synced');
-            toast.success('Session synchronized successfully');
-            console.log('[SupabaseAuthSync] Sync complete!');
+            toast.success('Session synchronized successfully!', { id: 'auth-sync' });
+            console.log('[SupabaseAuthSync] ✅ Sync complete!');
+
+            // Force query invalidation to ensure UI updates
+            console.log('[SupabaseAuthSync] 🔄 UI should update via React Query...');
+
         } catch (error: any) {
-            console.error('[SupabaseAuthSync] Sync failed:', error);
+            console.error('[SupabaseAuthSync] ❌ Sync failed:', error);
             setSyncStatus('error');
             hasSyncedRef.current = false; // Allow retry on error
             const msg = error?.message || error?.data?.message || 'Sync failed';
-            toast.error(`Auth sync error: ${msg}`);
+            toast.error(`Auth sync error: ${msg}`, { id: 'auth-sync' });
         } finally {
             isSyncingRef.current = false;
         }
@@ -61,6 +92,9 @@ export function SupabaseAuthSync() {
 
     // Check for existing Supabase session on mount
     useEffect(() => {
+        // Wait for auth check to complete
+        if (loading) return;
+
         const checkExistingSession = async () => {
             console.log('[SupabaseAuthSync] Checking for existing Supabase session...');
             const { data: { session } } = await supabase.auth.getSession();
@@ -83,7 +117,7 @@ export function SupabaseAuthSync() {
         };
 
         checkExistingSession();
-    }, []); // Only run once on mount
+    }, [loading, isAuthenticated]); // Re-run when loading finishes
 
     // Listen for auth state changes
     useEffect(() => {
@@ -120,51 +154,6 @@ export function SupabaseAuthSync() {
         }
     }, [isAuthenticated]);
 
-    // Debug Overlay
-    return (
-        <div className="fixed bottom-4 right-4 z-[9999] p-4 rounded-lg glass border border-border shadow-xl text-xs font-mono flex flex-col gap-1 min-w-[260px] transition-all opacity-80 hover:opacity-100 bg-background/80 backdrop-blur-md">
-            <div className="font-bold border-b border-border pb-1 mb-1 text-primary">Auth Debug Console</div>
-            <div className="flex justify-between gap-4">
-                <span className="text-muted-foreground">Supabase:</span>
-                <span className={supabaseUser ? 'text-green-500 truncate text-right flex-1' : 'text-red-500'}>
-                    {supabaseUser ? supabaseUser.email : 'LOGGED_OUT'}
-                </span>
-            </div>
-            <div className="flex justify-between gap-4">
-                <span className="text-muted-foreground">App Backend:</span>
-                <span className={isAuthenticated ? 'text-green-500 truncate text-right flex-1' : 'text-red-500'}>
-                    {isAuthenticated ? (user?.name || 'LOGGED_IN') : 'GUEST'}
-                </span>
-            </div>
-            <div className="flex justify-between gap-4">
-                <span className="text-muted-foreground">Sync Status:</span>
-                <span className={
-                    syncStatus === 'synced' || syncStatus === 'authenticated' ? 'text-green-500' :
-                        syncStatus === 'syncing' ? 'text-amber-500' :
-                            syncStatus === 'error' ? 'text-red-500' : 'text-muted-foreground'
-                }>
-                    {syncStatus.toUpperCase()}
-                </span>
-            </div>
-            <div className="flex justify-between gap-4 border-t border-border mt-1 pt-1">
-                <span className="text-muted-foreground">Loading:</span>
-                <span className={loading ? 'text-amber-500' : 'text-muted-foreground'}>{loading ? 'YES' : 'NO'}</span>
-            </div>
-            {syncStatus === 'syncing' && (
-                <div className="mt-2 text-amber-500 animate-pulse text-center font-bold bg-amber-500/10 py-1 rounded">
-                    [ SYNCING TO BACKEND... ]
-                </div>
-            )}
-            {isAuthenticated && (
-                <div className="mt-2 text-green-500 text-center font-bold bg-green-500/10 py-1 rounded">
-                    [ AUTHENTICATED ]
-                </div>
-            )}
-            {syncStatus === 'error' && (
-                <div className="mt-2 text-red-500 text-center font-bold bg-red-500/10 py-1 rounded">
-                    [ SYNC FAILED - CHECK CONSOLE ]
-                </div>
-            )}
-        </div>
-    );
+    // Logic is active, but UI is hidden as per user request
+    return null;
 }

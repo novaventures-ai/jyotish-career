@@ -1,6 +1,6 @@
 {
-  "id": "af59e39c-ea17-4922-90eb-cd10302e2fc5",
-  "prevId": "dd6ef889-e648-494e-9ca6-19ea5f8b4466",
+  "id": "4618638a-5c3a-40c5-811a-66ead029357d",
+  "prevId": "af59e39c-ea17-4922-90eb-cd10302e2fc5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -178,6 +178,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "profileId": {
+          "name": "profileId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "title": {
           "name": "title",
           "type": "text",
@@ -207,6 +213,19 @@
           "tableTo": "users",
           "columnsFrom": [
             "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "chatConversations_profileId_birthProfiles_id_fk": {
+          "name": "chatConversations_profileId_birthProfiles_id_fk",
+          "tableFrom": "chatConversations",
+          "tableTo": "birthProfiles",
+          "columnsFrom": [
+            "profileId"
           ],
           "columnsTo": [
             "id"

@@ -7,11 +7,11 @@ if (!API_KEY) {
     console.warn("GEMINI_API_KEY is not set in .env. AI features will be disabled.");
 }
 
-const genAI = new GoogleGenerativeAI(API_KEY || "");
-
-// Use gemini-2.5-flash (verified working via testing)
+// Use gemini-2.5-flash (Requested by user, confirmed available)
 const MODEL_NAME = "gemini-2.5-flash";
 console.log(`[AI Service] Initializing Gemini model: ${MODEL_NAME}`);
+
+const genAI = new GoogleGenerativeAI(API_KEY || "");
 
 const model = genAI.getGenerativeModel({
     model: MODEL_NAME,
@@ -80,7 +80,7 @@ async function callAi(prompt: string, errorContext: string): Promise<any> {
         console.log(`[AI-Service] Sending request to Gemini (${errorContext})...`);
 
         const timeout = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("AI Request Timed Out (25s)")), 25000)
+            setTimeout(() => reject(new Error("AI Request Timed Out (50s)")), 50000)
         );
 
         const result = await Promise.race([
@@ -283,7 +283,7 @@ export const AiService = {
 
                 output += `\n${chartNames[key] || key.toUpperCase()}:\n`;
                 (planets as any[]).forEach(p => {
-                    const dignity = p.dignity !== "neutral" ? ` [${p.dignity.toUpperCase()}]` : "";
+                    const dignity = (p.dignity && p.dignity !== "neutral") ? ` [${p.dignity.toUpperCase()}]` : "";
                     const retrograde = p.isRetrograde ? " (R)" : "";
                     const degreeInfo = p.degree !== undefined ? ` at ${p.degree}°${p.minute}'` : "";
                     const nakshatra = p.nakshatra ? ` [${p.nakshatra}]` : ""; // Only D1 has this usually
