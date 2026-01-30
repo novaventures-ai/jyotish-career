@@ -95,6 +95,11 @@ async function callAi(prompt: string, errorContext: string): Promise<any> {
 
         console.log(`[AI-Service] Raw response length from ${errorContext}:`, text.length);
 
+        // Bypass JSON parsing for chat (it needs raw markdown)
+        if (errorContext === "Chat with Counselor") {
+            return text;
+        }
+
         return extractJSON(text);
     } catch (error: any) {
         console.error(`AI ${errorContext} Error:`, error);
@@ -368,10 +373,8 @@ export const AiService = {
       8. FORMATTING: Use Markdown. Bold names and dates.
       9. **Deterministic Analysis**: Never say "I don't have enough info". Use the patterns you see.
       
-      Return ONLY a JSON object with this structure:
-      {
-        "response": "Your markdown-formatted astrological advice here"
-      }
+      Format your response in CLEAN MARKDOWN. no JSON.
+      Do not include "\`\`\`markdown" or "\`\`\`" at the start or end.
     `;
 
         // Format history for the prompt

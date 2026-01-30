@@ -154,7 +154,7 @@ export default function AstroCounselor() {
                             // Actually pure isPending is better for "Generating..." state.
                             // chatQuery.isFetching runs on poll/refetch. 
 
-                            className="h-full border-0 rounded-none shadow-none"
+                            className="h-full w-full border-0 rounded-none shadow-none"
                             placeholder="Ask the stars..."
                             emptyStateMessage="Analyzing your cosmic timeline..."
                             suggestedPrompts={[
