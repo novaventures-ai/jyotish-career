@@ -11,9 +11,9 @@ const __dirname = path.dirname(__filename);
 /**
  * High-precision Swiss Ephemeris wrapper for Vedic Astrology
  */
-import { createRequire } from "module";
+import Module from "module";
 
-const require = createRequire(import.meta.url);
+const _require = Module.createRequire(import.meta.url);
 
 // ...
 
@@ -40,7 +40,7 @@ export class SwissEphemeris {
                 // Local development: resolve from node_modules
                 (() => {
                     try {
-                        return require.resolve("sweph-wasm/dist/wasm/swisseph.wasm");
+                        return _require.resolve("sweph-wasm/dist/wasm/swisseph.wasm");
                     } catch {
                         return null;
                     }
