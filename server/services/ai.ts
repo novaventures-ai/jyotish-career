@@ -338,6 +338,7 @@ export const AiService = {
       
       ---
       ### DETAILED PLANETARY POSITIONS (ALL DIVISIONAL CHARTS)
+      (NOTE: This data IS AVAILABLE. Do not claim it is missing. Analyze it deeply.)
       ${formattedCharts}
       
       ---
@@ -347,6 +348,8 @@ export const AiService = {
       ---
       ### DASHA TIMELINE (Current Mahadasha Cycle)
       ${dashaText}
+      
+      CRITICAL INSTRUCTION: IF THE USER ASKS FOR D2/D9/ETC, LOOK AT THE SECTION ABOVE. THE DATA IS THERE. DO NOT SAY IT IS MISSING. CHECK "ALL DIVISIONAL CHARTS" SECTION.
       
       ---
       Career & Wealth Profile:
