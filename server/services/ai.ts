@@ -274,12 +274,27 @@ export const AiService = {
                 return numA - numB;
             });
 
+            const chartNames: Record<string, string> = {
+                d1: "D1 (Rashi - General Life)",
+                d2: "D2 (Hora - Wealth)",
+                d3: "D3 (Drekkana - Siblings/Effort)",
+                d4: "D4 (Chaturthamsa - Property/Home)",
+                d7: "D7 (Saptamsa - Children/Creativity)",
+                d8: "D8 (Ashtamsha - Sudden Events/Legacy)",
+                d9: "D9 (Navamsa - Inner Strength/Partnership)",
+                d10: "D10 (Dasamsa - Career/Status)",
+                d12: "D12 (Dwadasamsa - Parents/Ancestry)",
+                d16: "D16 (Shodashamsa - Vehicles/Happiness)",
+                d24: "D24 (Chaturvimshamsa - Education/Skills)",
+                d60: "D60 (Shashtiamsa - Past Life/Karma)"
+            };
+
             for (const key of sortedKeys) {
                 const planets = charts[key];
                 if (!Array.isArray(planets)) continue;
 
-                const dNum = key.toUpperCase();
-                output += `\n### ${dNum} Chart:\n`;
+                const displayName = chartNames[key] || `${key.toUpperCase()} Chart`;
+                output += `\n### ${displayName}:\n`;
                 (planets as any[]).forEach(p => {
                     const dignity = (p.dignity && p.dignity !== "neutral") ? ` [${p.dignity.toUpperCase()}]` : "";
                     const retrograde = p.isRetrograde ? " (R)" : "";
