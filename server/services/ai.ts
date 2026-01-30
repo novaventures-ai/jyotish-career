@@ -13,13 +13,16 @@ console.log(`[AI Service] Initializing Gemini model: ${MODEL_NAME}`);
 
 const genAI = new GoogleGenerativeAI(API_KEY || "");
 
-const model = genAI.getGenerativeModel({
-    model: MODEL_NAME,
-    generationConfig: {
-        responseMimeType: "application/json",
-        maxOutputTokens: 8000,
-    }
-});
+// Helper to get formatted model instance
+function getModel(jsonMode: boolean) {
+    return genAI.getGenerativeModel({
+        model: MODEL_NAME,
+        generationConfig: {
+            responseMimeType: jsonMode ? "application/json" : "text/plain",
+            maxOutputTokens: 8000,
+        }
+    });
+}
 
 function extractJSON(text: string): any {
     try {
@@ -71,17 +74,19 @@ function extractJSON(text: string): any {
     }
 }
 
-async function callAi(prompt: string, errorContext: string): Promise<any> {
+async function callAi(prompt: string, errorContext: string, jsonMode: boolean = true): Promise<any> {
     if (!API_KEY) {
         throw new Error("AI Service not configured");
     }
 
     try {
-        console.log(`[AI-Service] Sending request to Gemini (${errorContext})...`);
+        console.log(`[AI-Service] Sending request to Gemini (${errorContext}) [JSON: ${jsonMode}]...`);
 
         const timeout = new Promise((_, reject) =>
             setTimeout(() => reject(new Error("AI Request Timed Out (50s)")), 50000)
         );
+
+        const model = getModel(jsonMode);
 
         const result = await Promise.race([
             model.generateContent(prompt),
@@ -96,7 +101,7 @@ async function callAi(prompt: string, errorContext: string): Promise<any> {
         console.log(`[AI-Service] Raw response length from ${errorContext}:`, text.length);
 
         // Bypass JSON parsing for chat (it needs raw markdown)
-        if (errorContext === "Chat with Counselor") {
+        if (!jsonMode || errorContext === "Chat with Counselor") {
             return text;
         }
 
@@ -384,7 +389,7 @@ export const AiService = {
 
         const fullPrompt = `${systemPrompt}\n\n${conversationText}\nUser: ${message}\nAstrologer:`;
 
-        const result = await callAi(fullPrompt, "Chat with Counselor");
+        const result = await callAi(fullPrompt, "Chat with Counselor", false);
         return result.response || (typeof result === "string" ? result : JSON.stringify(result));
     },
 
