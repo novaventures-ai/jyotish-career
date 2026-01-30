@@ -111,20 +111,16 @@ export const chatRouter = router({
                     // Add basics from analysis
                     wealth: fullAnalysis.wealth,
 
-                    charts: {
-                        d1: chartData.d1.planets.map((p: any) => ({
-                            ...p,
-                            dignity: getPlanetDignity(p.planet, p.sign)
-                        })),
-                        d9: chartData.d9?.planets.map((p: any) => ({
-                            ...p,
-                            dignity: getPlanetDignity(p.planet, p.sign)
-                        })),
-                        d10: chartData.d10?.planets.map((p: any) => ({
-                            ...p,
-                            dignity: getPlanetDignity(p.planet, p.sign)
-                        }))
-                    }
+                    charts: Object.keys(chartData).reduce((acc: any, key) => {
+                        // Check if key is a divisional chart (d1, d2... d60) and has planets
+                        if (key.match(/^d\d+$/) && (chartData as any)[key]?.planets) {
+                            acc[key] = (chartData as any)[key].planets.map((p: any) => ({
+                                ...p,
+                                dignity: getPlanetDignity(p.planet, p.sign)
+                            }));
+                        }
+                        return acc;
+                    }, {})
                 };
 
                 // 6. Call AI
