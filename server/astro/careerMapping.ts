@@ -800,11 +800,15 @@ export function getTopCareerMatches(
     let hollandMatches = 0;
     for (const [code, value] of Object.entries(occupation.hollandCodes)) {
       const profileValue = profile.hollandCodes[code] || 0;
-      const matchContribution = (Math.min(profileValue, value) / Math.max(value, 1)) * (value / 100);
+      // Strict coverage ratio: If profile has 80 and job needs 80, result is 1.0 (Full points)
+      // If profile has 40 and job needs 80, result is 0.5
+      // If profile has 90 and job needs 80, result is 1.0 (capped)
+      const matchContribution = Math.min(profileValue, value) / Math.max(value, 1);
+
       hollandScore += matchContribution;
       hollandMatches++;
 
-      if (profileValue > 60 && value > 60) {
+      if (matchContribution >= 0.8) { // 80% match or better
         const hollandNames: Record<string, string> = {
           R: "Realistic", I: "Investigative", A: "Artistic",
           S: "Social", E: "Enterprising", C: "Conventional"
@@ -818,14 +822,15 @@ export function getTopCareerMatches(
         }
       }
     }
+    // Normalize holland score contribution
     score += (hollandScore / Math.max(hollandMatches, 1)) * 40;
 
-    // Match skills (25% weight)
+    // Match skills (30% weight - Increased from 25%)
     let skillScore = 0;
     for (const skill of occupation.skills) {
       const profileValue = profile.skills[skill.toLowerCase()] || profile.skills[skill] || 0;
       if (profileValue > 50) {
-        skillScore += profileValue / 100;
+        skillScore += Math.min(profileValue, 90) / 90; // Normalize against a high standard
         reasons.push(`${skill.charAt(0).toUpperCase() + skill.slice(1)} skills indicated`);
 
         // Add specific logic traces
@@ -834,21 +839,22 @@ export function getTopCareerMatches(
           traces.forEach(t => astroLogicSet.add(t));
         }
       } else if (profileValue > 30) {
-        skillScore += (profileValue / 100) * 0.5;
+        skillScore += 0.4; // Partial credit
       }
     }
-    score += (skillScore / Math.max(occupation.skills.length, 1)) * 25;
+    score += (skillScore / Math.max(occupation.skills.length, 1)) * 30;
 
-    // Match industry (20% weight)
+    // Match industry (15% weight - Decreased from 20%)
     const categoryLower = occupation.category.toLowerCase();
     let industryScore = 0;
     for (const [industry, value] of Object.entries(profile.industries)) {
       if (categoryLower.includes(industry) || industry.includes(categoryLower.split(" ")[0])) {
-        industryScore = Math.max(industryScore, value);
+        // Industry match should be relatively easy to hit 100% if relevant
+        industryScore = Math.min(value * 1.2, 100);
         reasons.push(`${occupation.category} industry alignment`);
       }
     }
-    score += (industryScore / 100) * 20;
+    score += (industryScore / 100) * 15;
 
     // Planetary support (15% weight)
     let planetScore = 0;
@@ -858,14 +864,13 @@ export function getTopCareerMatches(
         planetScore += 1;
       }
     }
+    // Boost planet score simply: 1 planet = 50%, 2+ planets = 100% relative to weight
+    // Or just linear: count / total (usually 3)
     score += (planetScore / Math.max(occupation.primaryPlanets.length, 1)) * 15;
 
-    // Add some variance based on unique chart factors
-    const varianceFactor = 0.9 + (Math.random() * 0.2); // 0.9 to 1.1
-    score *= varianceFactor;
-
-    // Ensure score is in reasonable range (30-95)
-    const finalScore = Math.max(30, Math.min(95, Math.round(score)));
+    // Ensure score is in reasonable range (40-98)
+    // We want good matches to be > 75
+    const finalScore = Math.max(40, Math.min(98, Math.round(score)));
 
     matches.push({
       occupationId: occupation.id,
