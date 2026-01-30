@@ -117,7 +117,7 @@ export default function AstroCounselor() {
     }
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] w-full max-w-7xl mx-auto overflow-hidden rounded-lg border shadow-xl bg-background">
+        <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] w-full mx-auto overflow-hidden rounded-lg border shadow-xl bg-background">
             {/* SIDEBAR - Hidden on mobile? For now flex-col on mobile? */}
             <div className="hidden md:block h-full">
                 <ChatSidebar
