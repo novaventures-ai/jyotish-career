@@ -13,6 +13,7 @@ import { generateMasterAnalysis } from "./astro/analyzer";
 import { geocodeAddress } from "./services/googleMaps";
 import { AiService } from "./services/ai";
 import { chatRouter } from "./chat_router";
+import { ENV } from "./_core/env";
 
 // ============================================
 // INPUT SCHEMAS
@@ -51,15 +52,15 @@ export const appRouter = router({
       .input(z.object({ accessToken: z.string() }))
       .mutation(async ({ ctx, input }) => {
         // 0. Check Environment
-        console.log('[Auth] Supabase URL present:', !!process.env.SUPABASE_URL);
-        console.log('[Auth] Supabase Service Role Key present:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
-        console.log('[Auth] Database URL present:', !!process.env.DATABASE_URL);
+        console.log('[Auth] Supabase URL present:', !!ENV.supabaseUrl);
+        console.log('[Auth] Supabase Service Role Key present:', !!ENV.supabaseServiceRoleKey);
+        console.log('[Auth] Database URL present:', !!ENV.databaseUrl);
 
         // 1. Verify token with Supabase
-        if (!supabaseAdmin || !process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        if (!supabaseAdmin || !ENV.supabaseUrl || !ENV.supabaseServiceRoleKey) {
           console.error('[Auth] ❌ supabaseAdmin client or keys are NOT initialized');
-          console.error('[Auth]   - URL:', !!process.env.SUPABASE_URL);
-          console.error('[Auth]   - Key:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
+          console.error('[Auth]   - URL:', !!ENV.supabaseUrl);
+          console.error('[Auth]   - Key:', !!ENV.supabaseServiceRoleKey);
           throw new Error("Server authentication service is temporarily unavailable (Client Init Failed)");
         }
 
