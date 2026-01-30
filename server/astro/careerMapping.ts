@@ -5,6 +5,7 @@
  */
 
 import type { BirthChart, PlanetPosition, DetectedYoga, FullChartData, VargaChart } from "./calculations";
+import { OCCUPATIONS } from "../data/career_database";
 
 // ============================================
 // TYPES
@@ -274,55 +275,7 @@ const HOUSE_CAREER_ATTRIBUTES: Record<number, CareerAttribute[]> = {
 // OCCUPATION DATABASE
 // ============================================
 
-export const OCCUPATIONS = [
-  // Technology
-  { id: 1, title: "Software Engineer", category: "Technology", hollandCodes: { I: 80, R: 60, C: 50 }, skills: ["analytical", "technical", "programming"], primaryPlanets: ["Mercury", "Rahu", "Ketu"] },
-  { id: 2, title: "Data Scientist", category: "Technology", hollandCodes: { I: 90, C: 70, R: 40 }, skills: ["analytical", "research", "technical"], primaryPlanets: ["Mercury", "Ketu", "Saturn"] },
-  { id: 3, title: "UX Designer", category: "Technology", hollandCodes: { A: 80, I: 60, S: 50 }, skills: ["creativity", "design", "communication"], primaryPlanets: ["Venus", "Mercury", "Moon"] },
-  { id: 4, title: "Product Manager", category: "Technology", hollandCodes: { E: 80, I: 60, S: 50 }, skills: ["leadership", "communication", "analytical"], primaryPlanets: ["Sun", "Mercury", "Jupiter"] },
-  { id: 5, title: "Cybersecurity Analyst", category: "Technology", hollandCodes: { I: 85, C: 70, R: 45 }, skills: ["analytical", "technical", "research"], primaryPlanets: ["Mars", "Ketu", "Saturn"] },
-
-  // Business
-  { id: 6, title: "Marketing Manager", category: "Business", hollandCodes: { E: 80, A: 60, S: 50 }, skills: ["communication", "creativity", "leadership"], primaryPlanets: ["Mercury", "Venus", "Sun"] },
-  { id: 7, title: "Financial Analyst", category: "Business", hollandCodes: { C: 85, I: 70, E: 40 }, skills: ["analytical", "financial", "research"], primaryPlanets: ["Mercury", "Saturn", "Jupiter"] },
-  { id: 8, title: "Management Consultant", category: "Business", hollandCodes: { E: 85, I: 65, S: 50 }, skills: ["advisory", "analytical", "communication"], primaryPlanets: ["Jupiter", "Mercury", "Sun"] },
-  { id: 9, title: "Entrepreneur", category: "Business", hollandCodes: { E: 90, R: 50, I: 45 }, skills: ["leadership", "innovation", "financial"], primaryPlanets: ["Sun", "Mars", "Rahu"] },
-  { id: 10, title: "Investment Banker", category: "Business", hollandCodes: { E: 85, C: 75, I: 55 }, skills: ["financial", "analytical", "negotiation"], primaryPlanets: ["Jupiter", "Mercury", "Saturn"] },
-
-  // Healthcare
-  { id: 11, title: "Doctor/Physician", category: "Healthcare", hollandCodes: { I: 85, S: 75, R: 45 }, skills: ["analytical", "emotional_intelligence", "research"], primaryPlanets: ["Sun", "Moon", "Mars"] },
-  { id: 12, title: "Nurse", category: "Healthcare", hollandCodes: { S: 90, R: 50, C: 45 }, skills: ["emotional_intelligence", "physical", "communication"], primaryPlanets: ["Moon", "Venus", "Mars"] },
-  { id: 13, title: "Psychologist", category: "Healthcare", hollandCodes: { S: 85, I: 75, A: 40 }, skills: ["emotional_intelligence", "research", "communication"], primaryPlanets: ["Moon", "Ketu", "Mercury"] },
-  { id: 14, title: "Pharmacist", category: "Healthcare", hollandCodes: { I: 75, C: 70, S: 55 }, skills: ["analytical", "research", "communication"], primaryPlanets: ["Mercury", "Moon", "Saturn"] },
-
-  // Creative
-  { id: 15, title: "Graphic Designer", category: "Creative", hollandCodes: { A: 90, R: 50, I: 40 }, skills: ["creativity", "design", "technical"], primaryPlanets: ["Venus", "Mercury", "Moon"] },
-  { id: 16, title: "Content Writer", category: "Creative", hollandCodes: { A: 75, I: 65, S: 45 }, skills: ["writing", "creativity", "communication"], primaryPlanets: ["Mercury", "Venus", "Moon"] },
-  { id: 17, title: "Film Director", category: "Creative", hollandCodes: { A: 85, E: 70, S: 50 }, skills: ["creativity", "leadership", "communication"], primaryPlanets: ["Venus", "Sun", "Rahu"] },
-  { id: 18, title: "Musician", category: "Creative", hollandCodes: { A: 95, S: 45, E: 40 }, skills: ["creativity", "intuition", "discipline"], primaryPlanets: ["Venus", "Moon", "Mercury"] },
-
-  // Education
-  { id: 19, title: "Professor", category: "Education", hollandCodes: { I: 85, S: 70, A: 45 }, skills: ["teaching", "research", "communication"], primaryPlanets: ["Jupiter", "Mercury", "Sun"] },
-  { id: 20, title: "School Teacher", category: "Education", hollandCodes: { S: 85, A: 55, I: 50 }, skills: ["teaching", "emotional_intelligence", "communication"], primaryPlanets: ["Jupiter", "Moon", "Mercury"] },
-  { id: 21, title: "Corporate Trainer", category: "Education", hollandCodes: { S: 75, E: 70, I: 50 }, skills: ["teaching", "communication", "leadership"], primaryPlanets: ["Jupiter", "Sun", "Mercury"] },
-
-  // Legal
-  { id: 22, title: "Lawyer", category: "Legal", hollandCodes: { E: 80, I: 70, S: 50 }, skills: ["communication", "analytical", "negotiation"], primaryPlanets: ["Jupiter", "Mars", "Mercury"] },
-  { id: 23, title: "Judge", category: "Legal", hollandCodes: { I: 80, E: 65, C: 60 }, skills: ["analytical", "leadership", "discipline"], primaryPlanets: ["Jupiter", "Sun", "Saturn"] },
-
-  // Government
-  { id: 24, title: "Civil Servant", category: "Government", hollandCodes: { C: 75, S: 65, E: 50 }, skills: ["management", "communication", "discipline"], primaryPlanets: ["Saturn", "Sun", "Moon"] },
-  { id: 25, title: "Diplomat", category: "Government", hollandCodes: { E: 80, S: 70, I: 50 }, skills: ["communication", "negotiation", "leadership"], primaryPlanets: ["Venus", "Jupiter", "Mercury"] },
-
-  // Engineering
-  { id: 26, title: "Mechanical Engineer", category: "Engineering", hollandCodes: { R: 85, I: 75, C: 50 }, skills: ["technical", "analytical", "problem_solving"], primaryPlanets: ["Mars", "Mercury", "Saturn"] },
-  { id: 27, title: "Civil Engineer", category: "Engineering", hollandCodes: { R: 80, I: 70, C: 55 }, skills: ["technical", "management", "analytical"], primaryPlanets: ["Mars", "Saturn", "Mercury"] },
-  { id: 28, title: "Architect", category: "Engineering", hollandCodes: { A: 75, R: 70, I: 60 }, skills: ["creativity", "design", "technical"], primaryPlanets: ["Venus", "Mars", "Mercury"] },
-
-  // Finance
-  { id: 29, title: "Accountant", category: "Finance", hollandCodes: { C: 90, I: 55, E: 35 }, skills: ["financial", "analytical", "discipline"], primaryPlanets: ["Saturn", "Mercury", "Jupiter"] },
-  { id: 30, title: "Stock Trader", category: "Finance", hollandCodes: { E: 80, I: 70, C: 55 }, skills: ["analytical", "financial", "innovation"], primaryPlanets: ["Mercury", "Rahu", "Mars"] },
-];
+// OCCUPATIONS moved to ../data/career_database.ts
 
 // ============================================
 // INCOME STREAMS DATABASE
@@ -839,7 +792,9 @@ export function getTopCareerMatches(
           traces.forEach(t => astroLogicSet.add(t));
         }
       } else if (profileValue > 30) {
-        skillScore += 0.4; // Partial credit
+        // Scaled partial credit instead of flat 0.4
+        // Example: 45 -> 0.45 * 0.8 = 0.36
+        skillScore += (profileValue / 100) * 0.8;
       }
     }
     score += (skillScore / Math.max(occupation.skills.length, 1)) * 30;
