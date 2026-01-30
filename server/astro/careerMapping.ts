@@ -738,7 +738,7 @@ function normalizeProfile(profile: CareerProfile): void {
  */
 export function getTopCareerMatches(
   profile: CareerProfile,
-  limit: number = 10
+  limit: number = 12
 ): CareerMatch[] {
   const matches: CareerMatch[] = [];
 
@@ -748,103 +748,156 @@ export function getTopCareerMatches(
     const planetarySupport: string[] = [];
     const astroLogicSet = new Set<string>();
 
-    // Match Holland codes (40% weight)
-    let hollandScore = 0;
-    let hollandMatches = 0;
-    for (const [code, value] of Object.entries(occupation.hollandCodes)) {
-      const profileValue = profile.hollandCodes[code] || 0;
-      // Strict coverage ratio: If profile has 80 and job needs 80, result is 1.0 (Full points)
-      // If profile has 40 and job needs 80, result is 0.5
-      // If profile has 90 and job needs 80, result is 1.0 (capped)
-      const matchContribution = Math.min(profileValue, value) / Math.max(value, 1);
+    // =========================================================
+    // 1. PLANETARY ALIGNMENT (40% Weight) - The Cosmic Driver
+    // =========================================================
+    let planetPoints = 0;
+    const planetTraceSet = new Set<string>();
 
-      hollandScore += matchContribution;
-      hollandMatches++;
+    // Check all logic traces for planet mentions to find "strong" planets that might not be "dominant"
+    const allTraces = Object.values(profile.logicTrace).flat().join(" ");
 
-      if (matchContribution >= 0.8) { // 80% match or better
-        const hollandNames: Record<string, string> = {
-          R: "Realistic", I: "Investigative", A: "Artistic",
-          S: "Social", E: "Enterprising", C: "Conventional"
-        };
-        reasons.push(`Strong ${hollandNames[code]} aptitude`);
-
-        // Add specific logic traces
-        const traces = profile.logicTrace?.[`holland_code:${code}`];
-        if (traces) {
-          traces.forEach(t => astroLogicSet.add(t));
-        }
-      }
-    }
-    // Normalize holland score contribution
-    score += (hollandScore / Math.max(hollandMatches, 1)) * 40;
-
-    // Match skills (30% weight - Increased from 25%)
-    let skillScore = 0;
-    for (const skill of occupation.skills) {
-      const profileValue = profile.skills[skill.toLowerCase()] || profile.skills[skill] || 0;
-      if (profileValue > 50) {
-        skillScore += Math.min(profileValue, 90) / 90; // Normalize against a high standard
-        reasons.push(`${skill.charAt(0).toUpperCase() + skill.slice(1)} skills indicated`);
-
-        // Add specific logic traces
-        const traces = profile.logicTrace?.[`skill:${skill.toLowerCase()}`];
-        if (traces) {
-          traces.forEach(t => astroLogicSet.add(t));
-        }
-      } else if (profileValue > 30) {
-        // Scaled partial credit instead of flat 0.4
-        // Example: 45 -> 0.45 * 0.8 = 0.36
-        skillScore += (profileValue / 100) * 0.8;
-      }
-    }
-    score += (skillScore / Math.max(occupation.skills.length, 1)) * 30;
-
-    // Match industry (15% weight - Decreased from 20%)
-    const categoryLower = occupation.category.toLowerCase();
-    let industryScore = 0;
-    for (const [industry, value] of Object.entries(profile.industries)) {
-      if (categoryLower.includes(industry) || industry.includes(categoryLower.split(" ")[0])) {
-        // Industry match should be relatively easy to hit 100% if relevant
-        industryScore = Math.min(value * 1.2, 100);
-        reasons.push(`${occupation.category} industry alignment`);
-      }
-    }
-    score += (industryScore / 100) * 15;
-
-    // Planetary support (15% weight)
-    let planetScore = 0;
     for (const planet of occupation.primaryPlanets) {
       if (profile.dominantPlanets.includes(planet)) {
+        planetPoints += 1.0; // Full point per dominant planet
         planetarySupport.push(planet);
-        planetScore += 1;
+        planetTraceSet.add(`${planet} is a Dominant Planet`);
+      } else if (allTraces.includes(planet)) {
+        planetPoints += 0.5; // Half point for strong placement (Exalted, Own Sign, Kendra)
+        if (!planetarySupport.includes(planet)) planetarySupport.push(`${planet} (Strong)`);
+        planetTraceSet.add(`${planet} has strong placement`);
       }
     }
-    // Boost planet score simply: 1 planet = 50%, 2+ planets = 100% relative to weight
-    // Or just linear: count / total (usually 3)
-    score += (planetScore / Math.max(occupation.primaryPlanets.length, 1)) * 15;
 
-    // Ensure score is in reasonable range (40-98)
-    // We want good matches to be > 75
-    const finalScore = Math.max(40, Math.min(98, Math.round(score)));
+    // Normalize: Getting 2 out of 3 primary planets is great. 3/3 is destiny.
+    // We strictly normalize against the number of primary planets (usually 3)
+    const normalizedPlanetScore = Math.min(planetPoints / Math.max(occupation.primaryPlanets.length, 1), 1.0);
+    score += normalizedPlanetScore * 40;
+
+    // =========================================================
+    // 2. HOLLAND CODE MATCH (30% Weight) - Personality Fit
+    // =========================================================
+    let hollandScore = 0;
+    const maxHollandPoints = 30;
+    const hollandCodesCount = Object.keys(occupation.hollandCodes).length;
+
+    for (const [code, requiredVal] of Object.entries(occupation.hollandCodes)) {
+      const profileVal = profile.hollandCodes[code] || 0;
+
+      // Calculate gap. If Profile >= Required - 15, we consider it a match.
+      // Higher profile value = better score.
+      if (profileVal >= requiredVal - 10) {
+        hollandScore += (1 / hollandCodesCount); // Full share
+        if (profileVal >= dataHighThreshold(requiredVal)) {
+          reasons.push(`Strong ${getHollandName(code)} aptitude`);
+        }
+      } else if (profileVal >= requiredVal - 25) {
+        hollandScore += (0.5 / hollandCodesCount); // Half share
+      }
+    }
+    score += Math.min(hollandScore * maxHollandPoints, 30);
+
+    // =========================================================
+    // 3. SKILL MATCH (20% Weight) - Learned Abilities
+    // =========================================================
+    let skillPoints = 0;
+    let matchedSkillsCount = 0;
+
+    occupation.skills.forEach(skill => {
+      const pSkill = skill.toLowerCase();
+      // Check exact match or partial match in keys
+      const skillVal = profile.skills[pSkill] ||
+        profile.skills[skill] ||
+        (Object.entries(profile.skills).find(([k]) => k.includes(pSkill))?.[1] || 0);
+
+      if (skillVal > 40) {
+        skillPoints += 1;
+        matchedSkillsCount++;
+        if (skillVal > 75) {
+          reasons.push(`${capitalize(skill)} expert`);
+        }
+      } else if (skillVal > 20) {
+        skillPoints += 0.5;
+      }
+    });
+
+    // Normalize against total required skills
+    const skillRatio = skillPoints / Math.max(occupation.skills.length, 1);
+    score += Math.min(skillRatio * 20, 20);
+
+    // =========================================================
+    // 4. INDUSTRY/CATEGORY MATCH (10% Weight)
+    // =========================================================
+    let industryScore = 0;
+    const occupationCat = occupation.category.toLowerCase();
+
+    for (const [ind, val] of Object.entries(profile.industries)) {
+      if (occupationCat.includes(ind) || ind.includes(occupationCat.split(" ")[0])) {
+        industryScore = Math.min(val, 100) / 100;
+        if (val > 60) reasons.push(`${occupation.category} industry fit`);
+      }
+    }
+    score += industryScore * 10;
+
+
+    // =========================================================
+    // DESTINY MULTIPLIER & SCALING
+    // =========================================================
+
+    // If Planetary Alignment is exceptionally high, boost the score.
+    // This represents the "Cosmic Driver" - natural talent overcoming lack of specific skills.
+    if (normalizedPlanetScore >= 0.9) {
+      score *= 1.25; // 25% Boost
+      reasons.unshift("✨ COSMIC DESTINY MATCH");
+      planetTraceSet.forEach(t => astroLogicSet.add(t));
+    } else if (normalizedPlanetScore >= 0.66) { // 2 out of 3
+      score *= 1.1; // 10% Boost
+      reasons.unshift("🌟 Strong Planetary Alignment");
+      planetTraceSet.forEach(t => astroLogicSet.add(t));
+    }
+
+    // Add traces for top scoring factors
+    if (skillRatio > 0.8) {
+      occupation.skills.forEach(s => {
+        const t = profile.logicTrace[`skill:${s.toLowerCase()}`];
+        if (t) t.forEach(x => astroLogicSet.add(x));
+      });
+    }
+
+    // Final Cap and Floor
+    const finalScore = Math.max(45, Math.min(Math.round(score), 99));
 
     matches.push({
       occupationId: occupation.id,
       title: occupation.title,
       category: occupation.category,
+      incomeStreamId: 0,
       matchScore: finalScore,
-      score: finalScore, // Add for frontend compatibility
-      matchReasons: Array.from(new Set(reasons)).slice(0, 4),
-      reasons: Array.from(new Set(reasons)).slice(0, 4), // Add for frontend compatibility
-      planetarySupport,
+      matchReasons: Array.from(new Set(reasons)).slice(0, 5),
+      planetarySupport: Array.from(new Set(planetarySupport)),
       astroLogic: Array.from(astroLogicSet).slice(0, 5),
+      // Frontend compatibility
+      score: finalScore,
+      name: occupation.title,
+      reasons: Array.from(new Set(reasons)).slice(0, 4),
+      // Add description from DB
+      // @ts-ignore
+      description: occupation.description || `Career in ${occupation.category}`
     });
   }
 
-  // Sort by score and return top matches
   return matches
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, limit);
 }
+
+// Helpers
+function getHollandName(code: string): string {
+  const map: Record<string, string> = { R: "Realistic", I: "Investigative", A: "Artistic", S: "Social", E: "Enterprising", C: "Conventional" };
+  return map[code] || code;
+}
+function dataHighThreshold(val: number): number { return val; } // Placeholder if needed
+function capitalize(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 /**
  * Get income stream recommendations with varied scoring

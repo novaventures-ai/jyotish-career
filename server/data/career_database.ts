@@ -6,6 +6,7 @@ export interface Occupation {
     hollandCodes: Record<string, number>;
     skills: string[];
     primaryPlanets: string[];
+    description?: string; // Short, punchy summary of the role
 }
 
 export const OCCUPATIONS: Occupation[] = [
@@ -14,30 +15,102 @@ export const OCCUPATIONS: Occupation[] = [
     // =================================================================
 
     // Agile & Product
-    { id: 101, title: "Scrum Master", category: "Technology", hollandCodes: { S: 85, E: 75, C: 60 }, skills: ["leadership", "communication", "management", "problem_solving"], primaryPlanets: ["Mercury", "Saturn", "Jupiter"] },
-    { id: 102, title: "Agile Coach", category: "Technology", hollandCodes: { S: 90, E: 70, I: 50 }, skills: ["teaching", "leadership", "communication", "emotional_intelligence"], primaryPlanets: ["Jupiter", "Mercury", "Saturn"] },
-    { id: 103, title: "Product Owner", category: "Technology", hollandCodes: { E: 85, C: 70, I: 60 }, skills: ["leadership", "analytical", "communication", "management"], primaryPlanets: ["Sun", "Mercury", "Mars"] },
-    { id: 104, title: "Technical Project Manager", category: "Technology", hollandCodes: { E: 80, C: 80, R: 60 }, skills: ["management", "technical", "communication", "discipline"], primaryPlanets: ["Saturn", "Mars", "Mercury"] },
-    { id: 105, title: "Product Manager", category: "Technology", hollandCodes: { E: 85, I: 70, S: 50 }, skills: ["leadership", "communication", "analytical", "creativity"], primaryPlanets: ["Sun", "Mercury", "Jupiter"] },
+    {
+        id: 101, title: "Scrum Master", category: "Technology",
+        hollandCodes: { S: 85, E: 75, C: 60 }, skills: ["leadership", "communication", "management", "problem_solving"], primaryPlanets: ["Mercury", "Saturn", "Jupiter"],
+        description: "Facilitate agile processes, remove blockers, and guide teams to high performance."
+    },
+    {
+        id: 102, title: "Agile Coach", category: "Technology",
+        hollandCodes: { S: 90, E: 70, I: 50 }, skills: ["teaching", "leadership", "communication", "emotional_intelligence"], primaryPlanets: ["Jupiter", "Mercury", "Saturn"],
+        description: "Mentor teams and leaders on agile principles to transform organizational culture."
+    },
+    {
+        id: 103, title: "Product Owner", category: "Technology",
+        hollandCodes: { E: 85, C: 70, I: 60 }, skills: ["leadership", "analytical", "communication", "management"], primaryPlanets: ["Sun", "Mercury", "Mars"],
+        description: "Define product vision and prioritize features to deliver maximum value."
+    },
+    {
+        id: 104, title: "Technical Project Manager", category: "Technology",
+        hollandCodes: { E: 80, C: 80, R: 60 }, skills: ["management", "technical", "communication", "discipline"], primaryPlanets: ["Saturn", "Mars", "Mercury"],
+        description: "Lead complex technical projects with a focus on timeline, scope, and quality."
+    },
+    {
+        id: 105, title: "Product Manager", category: "Technology",
+        hollandCodes: { E: 85, I: 70, S: 50 }, skills: ["leadership", "communication", "analytical", "creativity"], primaryPlanets: ["Sun", "Mercury", "Jupiter"],
+        description: "Drive product strategy and execution by bridging business, tech, and UX."
+    },
 
     // Engineering & DevOps
-    { id: 110, title: "Software Engineer", category: "Technology", hollandCodes: { I: 85, R: 70, C: 50 }, skills: ["analytical", "technical", "programming", "problem_solving"], primaryPlanets: ["Mercury", "Rahu", "Ketu"] },
-    { id: 111, title: "DevOps Engineer", category: "Technology", hollandCodes: { R: 85, C: 75, I: 60 }, skills: ["technical", "analytical", "discipline", "problem_solving"], primaryPlanets: ["Saturn", "Rahu", "Mars"] },
-    { id: 112, title: "Site Reliability Engineer (SRE)", category: "Technology", hollandCodes: { R: 80, C: 80, I: 70 }, skills: ["technical", "analytical", "discipline", "crisis_management"], primaryPlanets: ["Saturn", "Mars", "Mercury"] },
-    { id: 113, title: "Solutions Architect", category: "Technology", hollandCodes: { I: 90, E: 70, R: 60 }, skills: ["technical", "analytical", "communication", "design"], primaryPlanets: ["Jupiter", "Mercury", "Rahu"] },
-    { id: 114, title: "QA Automation Engineer", category: "Technology", hollandCodes: { C: 85, R: 70, I: 60 }, skills: ["technical", "analytical", "discipline", "detail_oriented"], primaryPlanets: ["Saturn", "Mercury", "Ketu"] },
-    { id: 115, title: "Full Stack Developer", category: "Technology", hollandCodes: { I: 80, R: 70, A: 50 }, skills: ["technical", "programming", "creativity", "analytical"], primaryPlanets: ["Mercury", "Rahu", "Venus"] },
-    { id: 116, title: "Mobile App Developer", category: "Technology", hollandCodes: { I: 75, R: 70, A: 60 }, skills: ["technical", "programming", "creativity", "design"], primaryPlanets: ["Mercury", "Venus", "Rahu"] },
+    {
+        id: 110, title: "Software Engineer", category: "Technology",
+        hollandCodes: { I: 85, R: 70, C: 50 }, skills: ["analytical", "technical", "programming", "problem_solving"], primaryPlanets: ["Mercury", "Rahu", "Ketu"],
+        description: "Design and build software solutions to solve complex problems."
+    },
+    {
+        id: 111, title: "DevOps Engineer", category: "Technology",
+        hollandCodes: { R: 85, C: 75, I: 60 }, skills: ["technical", "analytical", "discipline", "problem_solving"], primaryPlanets: ["Saturn", "Rahu", "Mars"],
+        description: "Bridge development and operations to automate and streamline deployment."
+    },
+    {
+        id: 112, title: "Site Reliability Engineer (SRE)", category: "Technology",
+        hollandCodes: { R: 80, C: 80, I: 70 }, skills: ["technical", "analytical", "discipline", "crisis_management"], primaryPlanets: ["Saturn", "Mars", "Mercury"],
+        description: "Ensure system reliability and scalability through automation and monitoring."
+    },
+    {
+        id: 113, title: "Solutions Architect", category: "Technology",
+        hollandCodes: { I: 90, E: 70, R: 60 }, skills: ["technical", "analytical", "communication", "design"], primaryPlanets: ["Jupiter", "Mercury", "Rahu"],
+        description: "Design comprehensive technical architectures to meet business business goals."
+    },
+    {
+        id: 114, title: "QA Automation Engineer", category: "Technology",
+        hollandCodes: { C: 85, R: 70, I: 60 }, skills: ["technical", "analytical", "discipline", "detail_oriented"], primaryPlanets: ["Saturn", "Mercury", "Ketu"],
+        description: "Ensure software quality through automated testing and rigorous validation."
+    },
+    {
+        id: 115, title: "Full Stack Developer", category: "Technology",
+        hollandCodes: { I: 80, R: 70, A: 50 }, skills: ["technical", "programming", "creativity", "analytical"], primaryPlanets: ["Mercury", "Rahu", "Venus"],
+        description: "Build end-to-end web applications handling both frontend and backend."
+    },
+    {
+        id: 116, title: "Mobile App Developer", category: "Technology",
+        hollandCodes: { I: 75, R: 70, A: 60 }, skills: ["technical", "programming", "creativity", "design"], primaryPlanets: ["Mercury", "Venus", "Rahu"],
+        description: "Create engaging mobile experiences for iOS and Android platforms."
+    },
 
     // Data & Analytics
-    { id: 120, title: "Data Scientist", category: "Technology", hollandCodes: { I: 95, C: 60, R: 50 }, skills: ["analytical", "research", "technical", "programming"], primaryPlanets: ["Mercury", "Ketu", "Jupiter"] },
-    { id: 121, title: "Data Engineer", category: "Technology", hollandCodes: { R: 80, C: 80, I: 70 }, skills: ["technical", "analytical", "programming", "discipline"], primaryPlanets: ["Saturn", "Mercury", "Rahu"] },
-    { id: 122, title: "Business Intelligence Analyst", category: "Technology", hollandCodes: { I: 80, C: 75, E: 50 }, skills: ["analytical", "communication", "technical", "research"], primaryPlanets: ["Mercury", "Jupiter", "Sun"] },
-    { id: 123, title: "Machine Learning Engineer", category: "Technology", hollandCodes: { I: 90, R: 80, C: 50 }, skills: ["technical", "analytical", "programming", "innovation"], primaryPlanets: ["Rahu", "Mercury", "Ketu"] },
+    {
+        id: 120, title: "Data Scientist", category: "Technology",
+        hollandCodes: { I: 95, C: 60, R: 50 }, skills: ["analytical", "research", "technical", "programming"], primaryPlanets: ["Mercury", "Ketu", "Jupiter"],
+        description: "Extract insights from complex data to drive strategic decision making."
+    },
+    {
+        id: 121, title: "Data Engineer", category: "Technology",
+        hollandCodes: { R: 80, C: 80, I: 70 }, skills: ["technical", "analytical", "programming", "discipline"], primaryPlanets: ["Saturn", "Mercury", "Rahu"],
+        description: "Build robust data pipelines and infrastructure for large-scale analytics."
+    },
+    {
+        id: 122, title: "Business Intelligence Analyst", category: "Technology",
+        hollandCodes: { I: 80, C: 75, E: 50 }, skills: ["analytical", "communication", "technical", "research"], primaryPlanets: ["Mercury", "Jupiter", "Sun"],
+        description: "Transform data into actionable business intelligence and visualizations."
+    },
+    {
+        id: 123, title: "Machine Learning Engineer", category: "Technology",
+        hollandCodes: { I: 90, R: 80, C: 50 }, skills: ["technical", "analytical", "programming", "innovation"], primaryPlanets: ["Rahu", "Mercury", "Ketu"],
+        description: "Building and deploying AI models to automate and optimize processes."
+    },
 
     // Cybersecurity
-    { id: 130, title: "Cybersecurity Analyst", category: "Technology", hollandCodes: { I: 85, C: 80, R: 60 }, skills: ["analytical", "technical", "research", "crisis_management"], primaryPlanets: ["Mars", "Ketu", "Saturn"] },
-    { id: 131, title: "Ethical Hacker", category: "Technology", hollandCodes: { R: 85, I: 80, E: 40 }, skills: ["technical", "innovation", "problem_solving", "unconventional"], primaryPlanets: ["Rahu", "Mars", "Mercury"] },
+    {
+        id: 130, title: "Cybersecurity Analyst", category: "Technology",
+        hollandCodes: { I: 85, C: 80, R: 60 }, skills: ["analytical", "technical", "research", "crisis_management"], primaryPlanets: ["Mars", "Ketu", "Saturn"],
+        description: "Protect organizational assets by monitoring and neutralizing cyber threats."
+    },
+    {
+        id: 131, title: "Ethical Hacker", category: "Technology",
+        hollandCodes: { R: 85, I: 80, E: 40 }, skills: ["technical", "innovation", "problem_solving", "unconventional"], primaryPlanets: ["Rahu", "Mars", "Mercury"],
+        description: "Identify system vulnerabilities before malicious actors can exploit them."
+    },
 
     // =================================================================
     // TIER 2: BUSINESS & OPERATIONS
@@ -105,22 +178,70 @@ export const OCCUPATIONS: Occupation[] = [
     // =================================================================
 
     // Civil Services & Government
-    { id: 401, title: "IAS Officer (Civil Services)", category: "Government", hollandCodes: { E: 90, S: 80, C: 60 }, skills: ["leadership", "management", "decision_making", "service"], primaryPlanets: ["Sun", "Jupiter", "Saturn"] },
-    { id: 402, title: "IPS Officer (Police Service)", category: "Government", hollandCodes: { R: 90, E: 85, S: 50 }, skills: ["leadership", "discipline", "physical", "crisis_management"], primaryPlanets: ["Mars", "Sun", "Saturn"] },
-    { id: 403, title: "IFS Officer (Foreign Service)", category: "Government", hollandCodes: { S: 85, E: 80, I: 70 }, skills: ["communication", "negotiation", "cultural_awareness", "diplomacy"], primaryPlanets: ["Venus", "Jupiter", "Sun"] },
-    { id: 404, title: "PSU / Govt Engineer", category: "Government", hollandCodes: { R: 85, C: 80, I: 60 }, skills: ["technical", "management", "discipline", "stability"], primaryPlanets: ["Saturn", "Mars", "Sun"] },
-    { id: 405, title: "Bank PO (Probationary Officer)", category: "Finance", hollandCodes: { C: 90, E: 70, S: 50 }, skills: ["financial", "management", "communication", "analytical"], primaryPlanets: ["Mercury", "Jupiter", "Sun"] },
+    {
+        id: 401, title: "IAS Officer (Civil Services)", category: "Government",
+        hollandCodes: { E: 90, S: 80, C: 60 }, skills: ["leadership", "management", "decision_making", "service"], primaryPlanets: ["Sun", "Jupiter", "Saturn"],
+        description: "Shape public policy and administration to drive national development."
+    },
+    {
+        id: 402, title: "IPS Officer (Police Service)", category: "Government",
+        hollandCodes: { R: 90, E: 85, S: 50 }, skills: ["leadership", "discipline", "physical", "crisis_management"], primaryPlanets: ["Mars", "Sun", "Saturn"],
+        description: "Maintain law and order, leading uniformed forces with courage and discipline."
+    },
+    {
+        id: 403, title: "IFS Officer (Foreign Service)", category: "Government",
+        hollandCodes: { S: 85, E: 80, I: 70 }, skills: ["communication", "negotiation", "cultural_awareness", "diplomacy"], primaryPlanets: ["Venus", "Jupiter", "Sun"],
+        description: "Represent the nation globally and manage diplomatic relations."
+    },
+    {
+        id: 404, title: "PSU / Govt Engineer", category: "Government",
+        hollandCodes: { R: 85, C: 80, I: 60 }, skills: ["technical", "management", "discipline", "stability"], primaryPlanets: ["Saturn", "Mars", "Sun"],
+        description: "Manage critical public infrastructure and technical projects."
+    },
+    {
+        id: 405, title: "Bank PO (Probationary Officer)", category: "Finance",
+        hollandCodes: { C: 90, E: 70, S: 50 }, skills: ["financial", "management", "communication", "analytical"], primaryPlanets: ["Mercury", "Jupiter", "Sun"],
+        description: "Manage banking operations and financial services in public sector banks."
+    },
 
     // Professional Services
-    { id: 410, title: "Chartered Accountant (CA)", category: "Finance", hollandCodes: { C: 95, I: 70, E: 50 }, skills: ["financial", "analytical", "discipline", "integrity"], primaryPlanets: ["Mercury", "Saturn", "Jupiter"] },
-    { id: 411, title: "Company Secretary (CS)", category: "Business", hollandCodes: { C: 90, E: 60, I: 50 }, skills: ["compliance", "legal", "communication", "discipline"], primaryPlanets: ["Saturn", "Mercury", "Sun"] },
-    { id: 412, title: "Ayurvedic Doctor", category: "Healthcare", hollandCodes: { I: 80, S: 80, R: 50 }, skills: ["healing", "intuition", "research", "service"], primaryPlanets: ["Jupiter", "Sun", "Ketu"] },
+    {
+        id: 410, title: "Chartered Accountant (CA)", category: "Finance",
+        hollandCodes: { C: 95, I: 70, E: 50 }, skills: ["financial", "analytical", "discipline", "integrity"], primaryPlanets: ["Mercury", "Saturn", "Jupiter"],
+        description: "Ensure financial accuracy, compliance, and strategic financial planning."
+    },
+    {
+        id: 411, title: "Company Secretary (CS)", category: "Business",
+        hollandCodes: { C: 90, E: 60, I: 50 }, skills: ["compliance", "legal", "communication", "discipline"], primaryPlanets: ["Saturn", "Mercury", "Sun"],
+        description: "Ensure corporate governance and regulatory compliance for organizations."
+    },
+    {
+        id: 412, title: "Ayurvedic Doctor", category: "Healthcare",
+        hollandCodes: { I: 80, S: 80, R: 50 }, skills: ["healing", "intuition", "research", "service"], primaryPlanets: ["Jupiter", "Sun", "Ketu"],
+        description: "Practice holistic medicine connecting ancient wisdom with healing."
+    },
 
     // Academic & Research
-    { id: 420, title: "University Professor", category: "Education", hollandCodes: { I: 90, S: 75, A: 50 }, skills: ["teaching", "research", "mentoring", "writing"], primaryPlanets: ["Jupiter", "Mercury", "Sun"] },
-    { id: 421, title: "Research Scientist", category: "Science", hollandCodes: { I: 95, R: 60, C: 50 }, skills: ["research", "analytical", "innovation", "patience"], primaryPlanets: ["Mercury", "Saturn", "Ketu"] },
+    {
+        id: 420, title: "University Professor", category: "Education",
+        hollandCodes: { I: 90, S: 75, A: 50 }, skills: ["teaching", "research", "mentoring", "writing"], primaryPlanets: ["Jupiter", "Mercury", "Sun"],
+        description: "Shape minds through advanced teaching, research, and mentorship."
+    },
+    {
+        id: 421, title: "Research Scientist", category: "Science",
+        hollandCodes: { I: 95, R: 60, C: 50 }, skills: ["research", "analytical", "innovation", "patience"], primaryPlanets: ["Mercury", "Saturn", "Ketu"],
+        description: "Push the boundaries of knowledge through rigorous scientific inquiry."
+    },
 
     // Business & Trade
-    { id: 430, title: "Family Business Owner", category: "Business", hollandCodes: { E: 90, C: 60, R: 50 }, skills: ["management", "leadership", "financial", "networking"], primaryPlanets: ["Jupiter", "Sun", "Mercury"] },
-    { id: 431, title: "Real Estate Developer", category: "Business", hollandCodes: { E: 85, R: 70, C: 50 }, skills: ["negotiation", "investment", "management", "vision"], primaryPlanets: ["Mars", "Saturn", "venus"] },
+    {
+        id: 430, title: "Family Business Owner", category: "Business",
+        hollandCodes: { E: 90, C: 60, R: 50 }, skills: ["management", "leadership", "financial", "networking"], primaryPlanets: ["Jupiter", "Sun", "Mercury"],
+        description: "Lead and grow generational business ventures with vision and stewardship."
+    },
+    {
+        id: 431, title: "Real Estate Developer", category: "Business",
+        hollandCodes: { E: 85, R: 70, C: 50 }, skills: ["negotiation", "investment", "management", "vision"], primaryPlanets: ["Mars", "Saturn", "Venus"],
+        description: "Develop physical infrastructure and property assets for growth."
+    },
 ];

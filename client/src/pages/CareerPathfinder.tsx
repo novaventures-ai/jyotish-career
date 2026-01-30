@@ -848,15 +848,28 @@ export default function CareerPathfinder() {
                             </Badge>
                           </div>
                           <div className="flex items-center gap-2 mb-2">
-                            <Progress value={match.score} className="h-2 flex-1 max-w-[200px]" />
-                            <span className={`text-sm font-medium ${match.score >= 80 ? "text-green-600" :
-                              match.score >= 60 ? "text-primary" :
-                                "text-muted-foreground"
-                              }`}>{match.score}%</span>
+                            <Badge className={`${typeof match.score === 'number' && match.score >= 90 ? "bg-purple-600 hover:bg-purple-700" :
+                                typeof match.score === 'number' && match.score >= 80 ? "bg-green-600 hover:bg-green-700" :
+                                  typeof match.score === 'number' && match.score >= 60 ? "bg-blue-600 hover:bg-blue-700" :
+                                    "bg-slate-500 hover:bg-slate-600"
+                              } border-none text-white`}>
+                              {typeof match.score === 'number' && match.score >= 90 ? "✨ Destiny Match" :
+                                typeof match.score === 'number' && match.score >= 80 ? "High Match" :
+                                  typeof match.score === 'number' && match.score >= 60 ? "Good Match" : "Moderate"}
+                            </Badge>
+                            <span className="text-sm font-bold ml-1">{match.score}%</span>
+                            <Progress value={match.score} className="h-2 w-20 ml-auto" />
                           </div>
+
+                          {match.description && (
+                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                              {match.description}
+                            </p>
+                          )}
+
                           <div className="flex flex-wrap gap-1">
                             {match.reasons?.slice(0, 3).map((reason: string, j: number) => (
-                              <span key={j} className="text-xs text-muted-foreground bg-background px-2 py-0.5 rounded">
+                              <span key={j} className="text-xs text-muted-foreground bg-background px-2 py-0.5 rounded border">
                                 {reason}
                               </span>
                             ))}
