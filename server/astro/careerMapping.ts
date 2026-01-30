@@ -38,6 +38,10 @@ export interface CareerMatch {
   planetarySupport: string[];
   timingInsights?: string;
   astroLogic?: string[];
+  // Frontend compatibility fields
+  score?: number;
+  name?: string;
+  reasons?: string[];
 }
 
 export interface IncomeStream {
@@ -868,7 +872,9 @@ export function getTopCareerMatches(
       title: occupation.title,
       category: occupation.category,
       matchScore: finalScore,
+      score: finalScore, // Add for frontend compatibility
       matchReasons: Array.from(new Set(reasons)).slice(0, 4),
+      reasons: Array.from(new Set(reasons)).slice(0, 4), // Add for frontend compatibility
       planetarySupport,
       astroLogic: Array.from(astroLogicSet).slice(0, 5),
     });
@@ -898,7 +904,6 @@ export function getIncomeStreamRecommendations(
     const astroLogicSet = new Set<string>();
 
     // Planetary support (35% weight)
-    // Planetary support (35% weight)
     let planetScore = 0;
     for (const planet of stream.favorablePlanets) {
       if (profile.dominantPlanets.includes(planet)) {
@@ -908,11 +913,9 @@ export function getIncomeStreamRecommendations(
 
         // Add detailed trace
         const traces = profile.logicTrace?.[`skill:${stream.requiredSkills[0]}`] || [];
-        // Just take the first relevant trace if available, or generate a generic one
         if (traces.length > 0) {
           traces.forEach(t => astroLogicSet.add(t));
         } else {
-          // Check specific conditions for this planet if not found in traces
           const planetPos = d1.planets.find(p => p.planet === planet);
           if (planetPos) {
             if ([1, 4, 7, 10].includes(planetPos.house)) astroLogicSet.add(`${planet} in Kendra (Strength)`);
@@ -920,12 +923,10 @@ export function getIncomeStreamRecommendations(
           }
         }
       } else {
-        // Check if planet is well-placed
         const planetPos = d1.planets.find(p => p.planet === planet);
         if (planetPos && [1, 4, 5, 7, 9, 10, 11].includes(planetPos.house)) {
           planetarySupport.push(planet);
           planetScore += 1;
-
           if ([2, 11].includes(planetPos.house)) {
             astroLogicSet.add(`${planet} in ${planetPos.house}th House (Wealth)`);
           } else if ([1, 4, 7, 10].includes(planetPos.house)) {
@@ -941,15 +942,9 @@ export function getIncomeStreamRecommendations(
     if (chartData.d2) {
       for (const planet of stream.favorablePlanets) {
         const d2Planet = chartData.d2.planets.find(p => p.planet === planet);
-        if (d2Planet) {
-          // In D2, planets in Cancer/Leo usually indicate method of wealth
-          // Simplified D2 strength: Planets in 2nd or 11th from D2 Ascendant (if houses are calculated)
-          // Or simply Sun/Moon hora placement logic if strictly following Parashara
-          // Here we use the generic 'house' property if assigned by `calculateVargaChart`
-          if ([2, 11].includes(d2Planet.house)) {
-            planetScore += 0.5;
-            astroLogicSet.add(`${planet} strong in D2 (Wealth Chart)`);
-          }
+        if (d2Planet && [2, 11].includes(d2Planet.house)) {
+          planetScore += 0.5;
+          astroLogicSet.add(`${planet} strong in D2 (Wealth Chart)`);
         }
       }
     }
@@ -978,7 +973,6 @@ export function getIncomeStreamRecommendations(
     score += (houseScore / stream.favorableHouses.length) * 25;
 
     // Skill match (25% weight)
-    // Skill match (25% weight)
     let skillScore = 0;
     for (const skill of stream.requiredSkills) {
       const profileValue = profile.skills[skill] || 0;
@@ -1003,7 +997,7 @@ export function getIncomeStreamRecommendations(
       score += (profile.workStyles["collaborative"] / 100) * 15;
       reasons.push("Suits collaborative style");
     } else if (stream.category === "hybrid") {
-      score += 10; // Hybrid suits most profiles
+      score += 10;
     }
 
     // Risk tolerance adjustment
@@ -1024,9 +1018,12 @@ export function getIncomeStreamRecommendations(
     matches.push({
       incomeStreamId: stream.id,
       title: stream.name,
+      name: stream.name, // Add for frontend compatibility
       category: stream.category,
       matchScore: finalScore,
+      score: finalScore, // Add for frontend compatibility
       matchReasons: Array.from(new Set(reasons)).slice(0, 4),
+      reasons: Array.from(new Set(reasons)).slice(0, 4), // Add for frontend compatibility
       planetarySupport,
       astroLogic: Array.from(astroLogicSet).slice(0, 5),
     });
