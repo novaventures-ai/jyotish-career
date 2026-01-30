@@ -267,21 +267,19 @@ export const AiService = {
             if (!charts) return "No divisional chart data available.";
 
             let output = "";
-            const chartNames: Record<string, string> = {
-                d1: "D1 (Rashi - General Life)",
-                d2: "D2 (Hora - Wealth)",
-                d9: "D9 (Navamsa - Inner Strength/Partnership)",
-                d10: "D10 (Dasamsa - Career/Status)",
-                d4: "D4 (Chaturthamsa - Property/Home)",
-                d8: "D8 (Ashtamsha - Sudden Events/Legacy)",
-                d24: "D24 (Chaturvimshamsa - Education/Skills)"
-            };
+            const sortedKeys = Object.keys(charts).sort((a, b) => {
+                // Sort by D number (d1, d2, d10, etc.)
+                const numA = parseInt(a.replace('d', '')) || 0;
+                const numB = parseInt(b.replace('d', '')) || 0;
+                return numA - numB;
+            });
 
-            for (const [key, planets] of Object.entries(charts)) {
+            for (const key of sortedKeys) {
+                const planets = charts[key];
                 if (!Array.isArray(planets)) continue;
-                if (!chartNames[key]) continue; // Skip charts we haven't defined names for if desired, or include all
 
-                output += `\n${chartNames[key] || key.toUpperCase()}:\n`;
+                const dNum = key.toUpperCase();
+                output += `\n### ${dNum} Chart:\n`;
                 (planets as any[]).forEach(p => {
                     const dignity = (p.dignity && p.dignity !== "neutral") ? ` [${p.dignity.toUpperCase()}]` : "";
                     const retrograde = p.isRetrograde ? " (R)" : "";
@@ -295,6 +293,17 @@ export const AiService = {
         };
 
         const formattedCharts = formatChartsForPrompt(profile.charts);
+
+        // Format Yogas
+        const yogaText = (profile.yogas && Array.isArray(profile.yogas))
+            ? profile.yogas.map((y: any) => `- **${y.name}** (${y.strength}): ${y.description}`).join("\n")
+            : "No major yogas detected.";
+
+        // Format Dasha Timeline (Simplified for prompt context)
+        // We only show the current Mahadasha cycle to avoid overwhelming tokens
+        const dashaText = profile.mahadashaDetails
+            ? JSON.stringify(profile.mahadashaDetails, null, 2)
+            : "Detailed timeline not available.";
 
         // Construct detailed system prompt
         const systemPrompt = `
@@ -312,33 +321,35 @@ export const AiService = {
       - Sookshma Dasha: ${profile.currentSookshmadasha} (Weekly precision)
       - Praana Dasha: ${profile.currentPraanadasha} (Daily precision)
       
-      Detailed Planetary Positions (Divisional Charts):
+      ---
+      ### DETAILED PLANETARY POSITIONS (ALL DIVISIONAL CHARTS)
       ${formattedCharts}
       
+      ---
+      ### YOGAS & COMBINATIONS
+      ${yogaText}
+
+      ---
+      ### DASHA TIMELINE (Current Mahadasha Cycle)
+      ${dashaText}
+      
+      ---
       Career & Wealth Profile:
       - Career Orientation: ${profile.orientation?.type || "Unknown"}
       - Wealth Source: ${profile.wealth?.d2Source || "Unknown"}
       - Status (D10): ${profile.wealth?.d10Status || "Unknown"}
 
-      Detailed Dasha Timeline (Current Mahadasha structure):
-      ${JSON.stringify(profile.mahadashaDetails || "Only current dasha available")}
-
       IMPORTANT INSTRUCTIONS:
-      1. For TIMING questions (When?): You MUST look at the Sookshma and Praana dashas. Give the user SPECIFIC MONTHS and WEEKS. Do NOT say "it's not available". It is right there in the context.
-      2. For PROPERTY/HOME: You MUST check the D4 chart data provided above. Look at the 4th house and its lord in D4.
-      3. For WEALTH: Check D2 planets and D8 (for windfalls) provided above.
-      4. For CAREER: Check D10 planets provided above. A planet in the 10th house of D10 is CRITICAL.
-      5. For FULFILLMENT: Check D9 (Navamsa). A planet weak in D10 but strong in D9 will eventually give results.
-      6. TONE: Be a supportive, wise guru. Avoid "astro-babble" without context. Explain WHY a planet is causing an effect (e.g., "Because Sun is in your 10th house in D10...").
-      7. FORMATTING: Use Markdown. **Bold** names and dates. Use tables or lists for timelines.
-      8. CRITICAL: Never say "I don't have enough info" if the charts are provided. Use the patterns you see to give a deterministic cosmic perspective.
-      9. ANALYSIS STRATEGY: 
-         - Always cross-reference D1 (Rashi) with the specific divisional chart (e.g., D10 for career). 
-         - Connect the current Dasha lord to the relevant divisional chart (e.g., "You are in Jupiter Dasha, and Jupiter is in the 5th house of your D10 chart...").
-         - **Dignity & Degrees**: Explicitly mention planetary dignity (Exalted/Debilitated) and specific degrees if relevant (e.g. "Sun at 29°").
-         - **Retrograde**: Note any Retrograde (R) planets and their "twisted" or "internalized" effects.
-         - **D10 Specifics**: For career, analyze the D10 10th lord's placement and the D1 10th lord's placement IN D10.
-
+      1. **FULL ACCESS**: You have access to ALL Divisional Charts (D1-D60), Yogas, and Dasha details. USE THEM.
+      2. **CROSS-EXAMINE**: Always validate D1 findings with the relevant Varga chart (e.g., D9 for strength, D10 for career, D4 for assets, D24 for skills).
+      3. For TIMING questions (When?): You MUST look at the Sookshma and Praana dashas.
+      4. For PROPERTY/HOME: Check D4.
+      5. For WEALTH: Check D2 and D11 (Gains).
+      6. For CAREER: Check D10.
+      7. TONE: Be a supportive, wise guru. Explain WHY a planet is causing an effect using specific chart references (e.g., "Jupiter in your D9...").
+      8. FORMATTING: Use Markdown. Bold names and dates.
+      9. **Deterministic Analysis**: Never say "I don't have enough info". Use the patterns you see.
+      
       Return ONLY a JSON object with this structure:
       {
         "response": "Your markdown-formatted astrological advice here"

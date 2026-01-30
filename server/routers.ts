@@ -781,6 +781,25 @@ export const appRouter = router({
         const careerProfile = generateCareerProfile(chartData);
         const fullAnalysis = generateMasterAnalysis(chartData);
 
+        // Pass ALL Divisional Charts dynamicly
+        const vargaCharts: any = {};
+        // Iterate over all keys in chartData
+        for (const key of Object.keys(chartData)) {
+          // Check if it's a divisional chart (d1, d2, d3... d60)
+          if (key.match(/^d\d+$/) && chartData[key]?.planets) {
+            vargaCharts[key] = chartData[key].planets.map((p: any) => ({
+              planet: p.planet,
+              house: p.house,
+              sign: p.sign,
+              degree: p.degree,
+              minute: p.minute,
+              isRetrograde: p.isRetrograde,
+              dignity: getPlanetDignity(p.planet, p.sign),
+              nakshatra: p.nakshatra // Included for all, though mostly relevant for D1
+            }));
+          }
+        }
+
         const profileContext = {
           ascendant: chartData.d1.ascendant.sign,
           moonSign: chartData.d1.planets.find((p: any) => p.planet === "Moon")?.sign,
@@ -791,39 +810,22 @@ export const appRouter = router({
           currentSookshmadasha: chartData.currentDasha.sookshmadasha,
           currentPraanadasha: chartData.currentDasha.praanadasha,
 
-          // Provide sub-periods of the current Mahadasha (includes Antar, Pratyantar, Sookshma, Praana)
+          // Full Dasha Timeline
+          dashas: chartData.dashas,
+
+          // Detected Yogas
+          yogas: chartData.yogas,
+
+          // All Varga Charts
+          charts: vargaCharts,
+
+          // Still provide pre-calculated details if useful
+          orientation: fullAnalysis.orientation,
+          wealth: fullAnalysis.wealth,
           mahadashaDetails: pruneDashaTree(
             chartData.dashas.find((d: any) => d.planet === chartData.currentDasha.mahadasha),
             new Date()
           ),
-
-          orientation: fullAnalysis.orientation,
-          wealth: fullAnalysis.wealth,
-
-          // All Divisional Charts for complete analysis
-          charts: {
-            d1: chartData.d1.planets.map((p: any) => ({
-              planet: p.planet,
-              house: p.house,
-              sign: p.sign,
-              degree: p.degree,
-              minute: p.minute,
-              isRetrograde: p.isRetrograde,
-              nakshatra: p.nakshatra, // D1 specific
-              dignity: getPlanetDignity(p.planet, p.sign)
-            })),
-            d2: chartData.d2?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d3: chartData.d3?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d4: chartData.d4?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d7: chartData.d7?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d8: chartData.d8?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d9: chartData.d9?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d10: chartData.d10?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d12: chartData.d12?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d16: chartData.d16?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d24: chartData.d24?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-            d60: chartData.d60?.planets.map((p: any) => ({ planet: p.planet, house: p.house, sign: p.sign, degree: p.degree, minute: p.minute, isRetrograde: p.isRetrograde, dignity: getPlanetDignity(p.planet, p.sign) })),
-          }
         };
 
         return await AiService.chatWithCounselor(profileContext, input.message, input.history);
