@@ -108,10 +108,10 @@ export function ChatSidebar({
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="size-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            className="size-8 md:size-6 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity active:bg-muted"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                            <MoreHorizontal className="size-3" />
+                                            <MoreHorizontal className="size-4 md:size-3" />
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
