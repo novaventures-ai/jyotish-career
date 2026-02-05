@@ -115,12 +115,18 @@ export function ChatSidebar({
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onClick={() => startEditing(conv)}>
+                                        <DropdownMenuItem onClick={(e) => {
+                                            e.stopPropagation();
+                                            startEditing(conv);
+                                        }}>
                                             <Pencil className="size-3 mr-2" />
                                             Rename
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
-                                            onClick={() => onDelete(conv.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDelete(conv.id);
+                                            }}
                                             className="text-destructive focus:text-destructive"
                                         >
                                             <Trash2 className="size-3 mr-2" />
