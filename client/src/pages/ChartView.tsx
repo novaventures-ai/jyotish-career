@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { useGuestChart } from "@/contexts/GuestChartContext";
+import { ExportButton } from "@/components/ExportButton";
 
 import {
   Star,
@@ -620,6 +621,7 @@ export default function ChartView() {
               <RotateCcw className="w-4 h-4 mr-2" />
               Reset
             </Button>
+            <ExportButton chartData={chartData} birthInfo={birthInfo} />
             <Button variant="outline" size="sm" onClick={handleNewChart}>
               <Plus className="w-4 h-4 mr-2" />
               New Chart

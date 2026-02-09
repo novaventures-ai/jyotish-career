@@ -13,9 +13,20 @@ import {
   ChevronRight,
   Sun,
   Moon,
-  Zap
+  Zap,
+  Download,
+  ScrollText,
+  Quote,
+  CheckCircle2,
+  Lock
 } from "lucide-react";
 import { Link } from "wouter";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -114,100 +125,78 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="container relative">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
+        <div className="container relative z-10">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6 animate-fade-in-up">
               <Sun className="w-4 h-4" />
               <span className="text-sm font-medium">Vedic Astrology meets Modern Career Guidance</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-balance animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
               Discover Your{" "}
               <span className="text-primary">Cosmic Career</span>{" "}
-              Blueprint with Vedic Astrology
+              Blueprint
             </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 text-balance">
-              Unlock personalized career insights based on your Vedic birth chart.
-              Connect ancient wisdom with modern opportunities to find your true professional path.
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 text-balance max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Unlock personalized career insights, wealth yoga detection, and timing analysis based on your precise Vedic birth chart.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               {hasChartData ? (
-                <Button size="lg" asChild className="text-lg px-8">
+                <Button size="lg" asChild className="text-lg px-8 h-12">
                   <Link href="/dashboard">
                     View Your Dashboard
                     <ChevronRight className="w-5 h-5 ml-2" />
                   </Link>
                 </Button>
               ) : (
-                <Button size="lg" asChild className="text-lg px-8">
+                <Button size="lg" asChild className="text-lg px-8 h-12 shadow-lg hover:shadow-primary/20 transition-all">
                   <Link href="/onboarding">
-                    Create Your Chart Free
+                    Create Chart Free
                     <ChevronRight className="w-5 h-5 ml-2" />
                   </Link>
                 </Button>
               )}
-              <Button size="lg" variant="outline" asChild className="text-lg px-8">
-                <a href="#features">Learn More</a>
+              <Button size="lg" variant="outline" asChild className="text-lg px-8 h-12">
+                <a href="#features">Explore Features</a>
               </Button>
             </div>
+          </div>
 
+          <div className="mt-8 max-w-sm mx-auto animate-fade-in-up flex flex-col items-center gap-4" style={{ animationDelay: '0.35s' }}>
             {!hasChartData && !isAuthenticated && (
-              <div className="mt-6 max-w-sm mx-auto">
-                <div className="flex items-center gap-4 mb-3">
-                  <div className="flex-1 h-px bg-border" />
-                  <span className="text-sm text-muted-foreground">or</span>
-                  <div className="flex-1 h-px bg-border" />
+              <>
+                <div className="w-full flex items-center gap-4 relative">
+                  <div className="flex-1 h-px bg-border/50"></div>
+                  <span className="text-xs text-muted-foreground uppercase tracking-widest bg-background px-2">or continue with</span>
+                  <div className="flex-1 h-px bg-border/50"></div>
                 </div>
-                <GoogleSignInButton variant="outline" className="max-w-sm mx-auto" />
-                <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Sign in to save your charts permanently
-                </p>
-              </div>
-            )}
-
-            {!hasChartData && (
-              <p className="text-sm text-muted-foreground mt-4">
-                No sign-up required. Generate your chart instantly.
-              </p>
+                <GoogleSignInButton variant="outline" className="w-full shadow-sm" />
+              </>
             )}
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-            {[
-              { value: "16", label: "Divisional Charts" },
-              { value: "100+", label: "Yogas Detected" },
-              { value: "900+", label: "Career Matches" },
-              { value: "9", label: "Planets Analyzed" }
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+
         </div>
       </section>
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-muted/30">
         <div className="container">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Vedic Astrology Career Guidance Features
+              Complete Career Astology Toolkit
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our comprehensive platform combines Vedic astrology calculations with modern career data
-              to provide actionable insights for your professional journey. Explore birth charts, career pathfinder,
-              earning sources, timing analysis, and personalized remedies.
+              Our comprehensive platform combines authentic Vedic astrology calculations with modern career data
+              to provide actionable professional guidance.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, i) => (
-              <Card key={i} className="card-hover border-border/50">
+              <Card key={i} className="card-hover border-border/50 bg-background/60 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4">
                     {feature.icon}
@@ -221,87 +210,108 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20">
+
+      {/* Testimonials Section */}
+      <section className="py-20 relative overflow-hidden">
         <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              How It Works
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Get your personalized career guidance in three simple steps. No sign-up required.
-            </p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Trusted by Career Seekers</h2>
+            <p className="text-lg text-muted-foreground">See how Vedic insights have helped professionals navigate their journey.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                step: "1",
-                icon: <Moon className="w-8 h-8" />,
-                title: "Enter Birth Details",
-                description: "Provide your date, time, and place of birth to generate your accurate Vedic chart."
+                text: "I was confused between Tech and Management. The chart analysis correctly identified my Mars position favoring leadership not just coding. Spot on!",
+                author: "Priya S.",
+                role: "Product Manager"
               },
               {
-                step: "2",
-                icon: <Star className="w-8 h-8" />,
-                title: "Chart Analysis",
-                description: "Our engine calculates your planetary positions, houses, and detects powerful yogas."
+                text: "The Dasha timing tool is incredible. It predicted my job change period to the exact month. The career remedies were simple and effective.",
+                author: "Arjun K.",
+                role: "Software Architect"
               },
               {
-                step: "3",
-                icon: <Compass className="w-8 h-8" />,
-                title: "Get Recommendations",
-                description: "Receive personalized career paths, income sources, and timing insights."
+                text: "Finally, an astrology app that speaks modern career language. No vague predictions, just clear actionable pathfinding based on planetary strengths.",
+                author: "Sarah M.",
+                role: "UX Designer"
               }
-            ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="relative inline-flex mb-6">
-                  <div className="w-20 h-20 rounded-full cosmic-gradient flex items-center justify-center text-white">
-                    {item.icon}
+            ].map((t, i) => (
+              <Card key={i} className="border-border/50 bg-background/40">
+                <CardContent className="p-8">
+                  <Quote className="w-8 h-8 text-primary/40 mb-4" />
+                  <p className="text-lg mb-6 leading-relaxed">"{t.text}"</p>
+                  <div>
+                    <div className="font-semibold">{t.author}</div>
+                    <div className="text-sm text-muted-foreground">{t.role}</div>
                   </div>
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-bold">
-                    {item.step}
-                  </span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-muted-foreground">{item.description}</p>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 cosmic-gradient text-white">
-        <div className="container text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Discover Your Path?
-          </h2>
-          <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-            Join thousands who have found career clarity through Vedic astrology.
-            Your cosmic blueprint awaits. No sign-up required to get started.
-          </p>
-          <Button size="lg" variant="secondary" asChild className="text-lg px-8">
-            <Link href="/onboarding">
-              Start Your Journey Free
-              <ChevronRight className="w-5 h-5 ml-2" />
-            </Link>
-          </Button>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container max-w-3xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-lg font-medium">Is this Vedic or Western Astrology?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base">
+                This platform follows <strong>Vedic Astrology (Sidereal Zodiac)</strong> using the Lahiri Ayanamsa. We believe this system offers superior accuracy for predictive timing (Dashas) and career-specific divisional chart analysis.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-lg font-medium">Why is my birth time important?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base">
+                Your birth time determines your Ascendant (Lagna) and the structure of all divisional charts, especially the <strong>D10 Dasamsa</strong> (Career Chart). Even a few minutes can shift these charts, so precision helps us give you the most accurate career advice.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-lg font-medium">How secure is my personal data?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base">
+                We prioritize your privacy. Your birth details are used <strong>exclusively</strong> to generate your chart analysis. We do not sell, rent, or share your personal information with third parties.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-4">
+              <AccordionTrigger className="text-lg font-medium">Do you offer detailed reports?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base">
+                Yes! Our analysis covers wealth potential, career strengths, and timing. We continuously update our algorithms to provide deeper insights into your professional life. Premium export options are also available for detailed offline study.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
         </div>
       </section>
 
+
       {/* Footer */}
-      <footer className="py-12 border-t border-border">
+      <footer className="py-12 border-t border-border bg-background">
         <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full cosmic-gradient flex items-center justify-center">
                 <Star className="w-4 h-4 text-white" />
               </div>
               <span className="font-semibold">Jyotish Career</span>
             </div>
+
+            <div className="flex gap-6 text-sm text-muted-foreground">
+              <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+            </div>
+
             <p className="text-sm text-muted-foreground">
-              Connecting Vedic wisdom with modern opportunities
+              © 2026 Jyotish Career. All rights reserved.
             </p>
           </div>
         </div>

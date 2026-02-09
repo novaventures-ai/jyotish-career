@@ -19,6 +19,8 @@ import WealthStatus from "./pages/WealthStatus";
 import SwotAnalysis from "@/pages/SwotAnalysis";
 import { CareerValidator } from "./pages/CareerValidator";
 import AstroCounselor from "./pages/AstroCounselor";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 function Router() {
   return (
@@ -37,6 +39,8 @@ function Router() {
       <Route path="/swot" component={SwotAnalysis} />
       <Route path="/career-validator" component={CareerValidator} />
       <Route path="/counselor" component={AstroCounselor} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
 
       {/* Fallback */}
       <Route path="/404" component={NotFound} />

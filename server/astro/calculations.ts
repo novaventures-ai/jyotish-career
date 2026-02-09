@@ -156,7 +156,7 @@ export interface VargaChart {
   name: string;
   division: number;
   planets: PlanetPosition[];
-  ascendant: { sign: string; signIndex: number; degree: number; minute: number; second: number };
+  ascendant: { sign: string; signIndex: number; degree: number; minute: number; second: number; nakshatra?: string };
 }
 
 export interface BirthChart {
@@ -966,7 +966,12 @@ export function calculateVargaChart(
       signIndex: vargaAscSignIndex,
       degree: Math.floor((ascDegreeInSign * division) % 30),
       minute: Math.floor((((ascDegreeInSign * division) % 30) % 1) * 60),
-      second: Math.round(((((ascDegreeInSign * division) % 30) % 1) * 60 % 1) * 60)
+      second: Math.round(((((ascDegreeInSign * division) % 30) % 1) * 60 % 1) * 60),
+      nakshatra: (() => {
+        const totalDegree = vargaAscSignIndex * 30 + ((ascDegreeInSign * division) % 30);
+        const index = Math.floor(totalDegree / (360 / 27));
+        return NAKSHATRAS[index] || "-";
+      })()
     }
   };
 }
