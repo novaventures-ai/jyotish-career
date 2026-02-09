@@ -233,7 +233,7 @@ export function ExportButton({ chartData, birthInfo }: ExportButtonProps) {
                             "Ascendant",
                             chart.ascendant.sign,
                             `${chart.ascendant.degree}°`,
-                            chart.ascendant.nakshatra,
+                            chart.ascendant.nakshatra || "-",
                             "1",
                             "-"
                         ]);
@@ -315,12 +315,13 @@ export function ExportButton({ chartData, birthInfo }: ExportButtonProps) {
                 const chart = chartData[varga.id];
                 if (chart && chart.planets) {
                     txt += `\n${varga.name.toUpperCase()} CHART DETAILS\n${"-".repeat(varga.name.length + 14)}\n`;
-                    txt += `Planet      Sign        Degree\tHouse\n`;
+                    txt += `Planet      Sign        Degree\tNakshatra\tHouse\tStatus\n`;
                     chart.planets.forEach((p: PlanetPosition) => {
-                        txt += `${p.planet.padEnd(11)} ${p.sign.padEnd(11)} ${Math.floor(p.degree)}° ${p.minute}'\t${p.house}\n`;
+                        const status = p.isRetrograde ? "Retrograde" : "Direct";
+                        txt += `${p.planet.padEnd(11)} ${p.sign.padEnd(11)} ${Math.floor(p.degree)}° ${p.minute}'\t${p.nakshatra} (${p.nakshatraPada})\t${p.house}\t${status}\n`;
                     });
                     if (chart.ascendant) {
-                        txt += `Ascendant   ${chart.ascendant.sign.padEnd(11)} ${Math.floor(chart.ascendant.degree)}°      \t1\n`;
+                        txt += `Ascendant   ${chart.ascendant.sign.padEnd(11)} ${Math.floor(chart.ascendant.degree)}°      \t${chart.ascendant.nakshatra || "-"}\t1\t-\n`;
                     }
                     txt += "\n";
                 }
@@ -408,17 +409,17 @@ export function ExportButton({ chartData, birthInfo }: ExportButtonProps) {
                     yPos += 5;
 
                     const rows = chart.planets.map((p: PlanetPosition) => [
-                        p.planet, p.sign, `${p.degree}° ${p.minute}'`, p.nakshatra, p.house.toString()
+                        p.planet, p.sign, `${p.degree}° ${p.minute}'`, `${p.nakshatra} (${p.nakshatraPada})`, p.house.toString(), p.isRetrograde ? "R" : ""
                     ]);
 
                     if (chart.ascendant) {
-                        rows.push(["Ascendant", chart.ascendant.sign, `${chart.ascendant.degree}°`, chart.ascendant.nakshatra, "1"]);
+                        rows.push(["Ascendant", chart.ascendant.sign, `${chart.ascendant.degree}°`, chart.ascendant.nakshatra || "-", "1", ""]);
                     }
 
                     // @ts-ignore
                     autoTable(doc, {
                         startY: yPos,
-                        head: [['Planet', 'Sign', 'Degree', 'Nakshatra', 'House']],
+                        head: [['Planet', 'Sign', 'Degree', 'Nakshatra', 'House', 'R']],
                         body: rows,
                         theme: 'striped',
                         headStyles: { fillColor: [41, 128, 185] },
@@ -507,27 +508,27 @@ export function ExportButton({ chartData, birthInfo }: ExportButtonProps) {
                     <ChevronDown className="w-3 h-3 opacity-50" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-white border shadow-md z-[100]">
-                <DropdownMenuLabel>Export Options</DropdownMenuLabel>
-                <DropdownMenuSeparator />
+            <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-slate-900 border shadow-md dark:border-slate-800 z-[100]">
+                <DropdownMenuLabel className="dark:text-slate-200">Export Options</DropdownMenuLabel>
+                <DropdownMenuSeparator className="dark:bg-slate-700" />
 
-                <DropdownMenuItem onClick={handleExportExcel} className="cursor-pointer flex items-center p-2 hover:bg-slate-100">
-                    <FileSpreadsheet className="w-4 h-4 mr-2 text-green-600" />
+                <DropdownMenuItem onClick={handleExportExcel} className="cursor-pointer flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300">
+                    <FileSpreadsheet className="w-4 h-4 mr-2 text-green-600 dark:text-green-500" />
                     Excel (.xlsx)
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={handleExportPDF} className="cursor-pointer flex items-center p-2 hover:bg-slate-100">
-                    <FileText className="w-4 h-4 mr-2 text-red-600" />
+                <DropdownMenuItem onClick={handleExportPDF} className="cursor-pointer flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300">
+                    <FileText className="w-4 h-4 mr-2 text-red-600 dark:text-red-500" />
                     PDF Report (.pdf)
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={handleExportJSON} className="cursor-pointer flex items-center p-2 hover:bg-slate-100">
-                    <FileJson className="w-4 h-4 mr-2 text-yellow-600" />
+                <DropdownMenuItem onClick={handleExportJSON} className="cursor-pointer flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300">
+                    <FileJson className="w-4 h-4 mr-2 text-yellow-600 dark:text-yellow-500" />
                     JSON Data (.json)
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={handleExportText} className="cursor-pointer flex items-center p-2 hover:bg-slate-100">
-                    <FileIcon className="w-4 h-4 mr-2 text-slate-600" />
+                <DropdownMenuItem onClick={handleExportText} className="cursor-pointer flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300">
+                    <FileIcon className="w-4 h-4 mr-2 text-slate-600 dark:text-slate-400" />
                     Text File (.txt)
                 </DropdownMenuItem>
 
