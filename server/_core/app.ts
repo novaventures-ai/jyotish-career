@@ -3,6 +3,8 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
+import { getDb } from "../db";
+import { sql } from "drizzle-orm";
 
 export const app = express();
 
@@ -22,6 +24,33 @@ app.use((req: any, res: any, next: any) => {
 
 // OAuth callback under /api/oauth/callback
 registerOAuthRoutes(app);
+
+// Keep-alive endpoint for cron jobs to prevent Supabase from pausing
+app.get("/api/keep-alive", async (_req: Request, res: Response) => {
+    try {
+        console.log('[Keep-Alive] Pinging database...');
+        const dbClient = await getDb();
+        if (!dbClient) {
+            throw new Error("Database not available");
+        }
+        
+        // Use a simple query that touches Supabase
+        await dbClient.execute(sql`SELECT 1`);
+        
+        console.log('[Keep-Alive] ✅ Database ping successful');
+        return res.status(200).json({ 
+            success: true, 
+            message: "Keep-alive successful",
+            timestamp: new Date().toISOString()
+        });
+    } catch (error: any) {
+        console.error('[Keep-Alive] ❌ Failed:', error.message);
+        return res.status(500).json({ 
+            success: false, 
+            error: error.message 
+        });
+    }
+});
 
 // tRPC API
 app.use(
