@@ -1,7 +1,7 @@
 ﻿import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { publicProcedure, protectedProcedure, aiPublicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import { supabaseAdmin } from "./_core/supabase";
@@ -521,7 +521,7 @@ export const appRouter = router({
 
   // AI Router
   ai: router({
-    validateCareer: publicProcedure
+    validateCareer: aiPublicProcedure
       .input(z.object({
         profileId: z.number().optional(),
         chartData: z.any().optional(),
@@ -565,7 +565,7 @@ export const appRouter = router({
         );
       }),
 
-    expandCareerList: publicProcedure
+    expandCareerList: aiPublicProcedure
       .input(z.object({
         profileId: z.number().optional(),
         chartData: z.any().optional(),
@@ -593,7 +593,7 @@ export const appRouter = router({
         return await AiService.generateCareerCandidates(planets);
       }),
 
-    validateBusiness: publicProcedure
+    validateBusiness: aiPublicProcedure
       .input(z.object({
         profileId: z.number().optional(),
         chartData: z.any().optional(),
@@ -663,7 +663,7 @@ export const appRouter = router({
         return await AiService.validateBusinessIdea(profileContext, input.businessIdea);
       }),
 
-    getSwotAnalysis: publicProcedure
+    getSwotAnalysis: aiPublicProcedure
       .input(z.object({
         profileId: z.number().optional(),
         chartData: z.any().optional(),
@@ -693,7 +693,7 @@ export const appRouter = router({
         return await AiService.generateSwotStrategy(profileContext, fullAnalysis.swot);
       }),
 
-    getWealthNarrative: publicProcedure
+    getWealthNarrative: aiPublicProcedure
       .input(z.object({
         profileId: z.number().optional(),
         chartData: z.any().optional(),
@@ -731,7 +731,7 @@ export const appRouter = router({
         return await AiService.generateWealthNarrative(profileContext, fullAnalysis.wealth, futureEvents);
       }),
 
-    chat: publicProcedure
+    chat: aiPublicProcedure
       .input(z.object({
         profileId: z.number().optional(),
         birthData: z.any().optional(),

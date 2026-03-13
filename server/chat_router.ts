@@ -1,7 +1,7 @@
 import { z } from "zod";
 import * as db from "./db";
 import { AiService } from "./services/ai";
-import { protectedProcedure, router } from "./_core/trpc";
+import { protectedProcedure, aiProtectedProcedure, router } from "./_core/trpc";
 import { generateFullChartData, pruneDashaTree, BirthData, getPlanetDignity } from "./astro/calculations";
 import { generateCareerProfile } from "./astro/careerMapping";
 import { generateMasterAnalysis } from "./astro/analyzer";
@@ -36,8 +36,8 @@ export const chatRouter = router({
             return { conversation, messages };
         }),
 
-    // Send a message
-    sendMessage: protectedProcedure
+    // Send a message (rate-limited: max 5 AI calls per session per hour)
+    sendMessage: aiProtectedProcedure
         .input(z.object({
             conversationId: z.number(),
             message: z.string()

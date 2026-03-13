@@ -5,8 +5,12 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { getDb } from "../db";
 import { sql } from "drizzle-orm";
+import { aiIpRateLimiter } from "../middleware/rateLimit";
 
 export const app = express();
+
+// Trust proxy headers (Vercel/reverse proxy) for correct IP detection
+app.set("trust proxy", 1);
 
 // Configure body parser with larger size limit for file uploads
 app.use(express.json({ limit: "50mb" }));
@@ -51,6 +55,9 @@ app.get("/api/keep-alive", async (_req: Request, res: Response) => {
         });
     }
 });
+
+// IP-level rate limit: max 20 AI requests per IP per hour
+app.use("/api/trpc", aiIpRateLimiter);
 
 // tRPC API
 app.use(
