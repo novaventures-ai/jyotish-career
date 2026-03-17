@@ -22,8 +22,15 @@ import {
   PlusCircle,
   Target,
   BrainCircuit,
-  MessageCircle
+  MessageCircle,
+  Info
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
 import { NavSidebar, MobileHeader, MobileNav } from "@/components/AppShell";
@@ -225,67 +232,109 @@ export default function Dashboard() {
 
 
               {/* Quick stats */}
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                        <Sun className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Ascendant</p>
-                        <p className="font-semibold">{chartData.d1?.ascendant?.sign || "—"}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <TooltipProvider>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Card className="cursor-help">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                              <Sun className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">Ascendant</p>
+                                <Info className="w-3.5 h-3.5 text-muted-foreground/50" />
+                              </div>
+                              <p className="font-semibold">{chartData.d1?.ascendant?.sign || "—"}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs">
+                      <p><strong>Lagna (Ascendant)</strong>: Represents your physical body, temperament, and self-expression. It is the foundation of your entire life path.</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                        <Moon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Moon Sign</p>
-                        <p className="font-semibold">
-                          {chartData.d1?.planets?.find((p: any) => p.planet === "Moon")?.sign || "—"}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Card className="cursor-help">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                              <Moon className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">Moon Sign</p>
+                                <Info className="w-3.5 h-3.5 text-muted-foreground/50" />
+                              </div>
+                              <p className="font-semibold">
+                                {chartData.d1?.planets?.find((p: any) => p.planet === "Moon")?.sign || "—"}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs">
+                      <p><strong>Rashi (Moon Sign)</strong>: Governs your emotional state, mind, and general happiness. Vital for understanding your work environment preferences.</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                        <Sparkles className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Yogas Found</p>
-                        <p className="font-semibold">{chartData.yogas?.length || 0}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Card className="cursor-help">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                              <Sparkles className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">Yogas Found</p>
+                                <Info className="w-3.5 h-3.5 text-muted-foreground/50" />
+                              </div>
+                              <p className="font-semibold">{chartData.yogas?.length || 0}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs">
+                      <p><strong>Yogas</strong>: Auspicious planetary combinations that indicate special strengths, wealth potential, and significant achievements in your career.</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                        <Star className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Nakshatra</p>
-                        <p className="font-semibold">
-                          {chartData.d1?.planets?.find((p: any) => p.planet === "Moon")?.nakshatra || "—"}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Card className="cursor-help">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                              <Star className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted-foreground">Nakshatra</p>
+                                <Info className="w-3.5 h-3.5 text-muted-foreground/50" />
+                              </div>
+                              <p className="font-semibold">
+                                {chartData.d1?.planets?.find((p: any) => p.planet === "Moon")?.nakshatra || "—"}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs">
+                      <p><strong>Nakshatra</strong>: The deep personality archetype that reveals your innate talents, behavioral patterns, and hidden karmic blueprints.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
 
               {/* Quick actions */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4">
