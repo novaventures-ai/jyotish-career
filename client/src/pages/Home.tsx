@@ -18,7 +18,7 @@ import {
   ScrollText,
   Quote,
   CheckCircle2,
-  Lock
+  Lock,
 } from "lucide-react";
 import { Link } from "wouter";
 import {
@@ -261,6 +261,8 @@ export default function Home() {
       </section>
 
 
+
+
       {/* FAQ Section */}
       <section className="py-20 bg-muted/30">
         <div className="container max-w-3xl">
@@ -333,7 +335,8 @@ export default function Home() {
               <span className="font-semibold">Jyotish Career</span>
             </div>
 
-            <div className="flex gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm text-muted-foreground">
+
               <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
             </div>
