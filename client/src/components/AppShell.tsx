@@ -19,6 +19,7 @@ import {
     BrainCircuit,
     Bot
 } from "lucide-react";
+import { LoginButton } from "./LoginButton";
 
 export function NavSidebar({
     user,
@@ -91,7 +92,7 @@ export function NavSidebar({
                         </Button>
                     </>
                 ) : (
-                    <GoogleSignInButton className="w-full" />
+                    <LoginButton />
                 )}
             </div>
         </aside>
@@ -121,7 +122,9 @@ export function MobileHeader({
                             <LogOut className="w-5 h-5" />
                         </Button>
                     ) : (
-                        <GoogleSignInButton variant="ghost" className="text-sm" />
+                        <div className="w-24">
+                            <LoginButton />
+                        </div>
                     )}
                 </div>
             </div>

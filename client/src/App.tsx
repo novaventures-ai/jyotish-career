@@ -21,6 +21,7 @@ import { CareerValidator } from "./pages/CareerValidator";
 import AstroCounselor from "./pages/AstroCounselor";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import { useMigration } from "./hooks/useMigration";
 
 function Router() {
   return (
@@ -49,16 +50,23 @@ function Router() {
   );
 }
 
+function MigrationWrapper({ children }: { children: React.ReactNode }) {
+  useMigration();
+  return <>{children}</>;
+}
+
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <GuestChartProvider>
-          <TooltipProvider>
-            <Toaster />
-            <SupabaseAuthSync />
-            <Router />
-          </TooltipProvider>
+          <MigrationWrapper>
+            <TooltipProvider>
+              <Toaster />
+              <SupabaseAuthSync />
+              <Router />
+            </TooltipProvider>
+          </MigrationWrapper>
         </GuestChartProvider>
       </ThemeProvider>
     </ErrorBoundary>

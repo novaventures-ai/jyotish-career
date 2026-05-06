@@ -1,0 +1,470 @@
+{
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\drizzle.config.ts": {
+    "mtime": 1768663953.7436173,
+    "hash": "00213c16b5dedecc98778a2aacc1df1e"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\supabase_setup.sql": {
+    "mtime": 1769061543.3628883,
+    "hash": "b3f73b338b03d42e66cf2f112d54490f"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\vite.config.ts": {
+    "mtime": 1768708879.728358,
+    "hash": "4581a53edc8a78f65c946890e1750a2c"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\vitest.config.ts": {
+    "mtime": 1768663953.8378034,
+    "hash": "7c584e72da962caa53ac209f9cc7c1bf"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\sw.js": {
+    "mtime": 1768663952.474273,
+    "hash": "094ee2b16d4317bce524afe8e75c1425"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\App.tsx": {
+    "mtime": 1769057599.4336925,
+    "hash": "1f405c5825f444b6445a81c710454e2c"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\const.ts": {
+    "mtime": 1768663952.7075486,
+    "hash": "5f3afb037013a54a2cf62b621b5e9f28"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\main.tsx": {
+    "mtime": 1769058516.9433198,
+    "hash": "cce77a0fa65b67f0f0e26781841e0c4d"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\AIChatBox.tsx": {
+    "mtime": 1768663952.7612152,
+    "hash": "28907b2d3544be510c72d98a6dfd5cfd"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\AppShell.tsx": {
+    "mtime": 1769026651.854311,
+    "hash": "b4b4017bba8b1f4191037339a9b32b90"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\DashboardLayout.tsx": {
+    "mtime": 1768663952.7712286,
+    "hash": "b4128a8f9f56b768204ae18ced0b6ee1"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\DashboardLayoutSkeleton.tsx": {
+    "mtime": 1768663952.7712286,
+    "hash": "52ccf978cf485fd9aa882e199d66a3f8"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ErrorBoundary.tsx": {
+    "mtime": 1768663952.7712286,
+    "hash": "92d65c611d7e8336eb920329b0e0ffad"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\LoginButton.tsx": {
+    "mtime": 1769025630.9399664,
+    "hash": "47a73dab6953b83d84c759953b7dee9c"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ManusDialog.tsx": {
+    "mtime": 1768663952.7868576,
+    "hash": "13c9de7c368297ddbfc5bb321793060c"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\Map.tsx": {
+    "mtime": 1768663952.7868576,
+    "hash": "651182e03ca936c68d60b16db8e3e0c0"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\PlaceAutocomplete.tsx": {
+    "mtime": 1768668782.9658494,
+    "hash": "7daccc9aa338e245b74d627c90d3436f"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\WealthAnalysis.tsx": {
+    "mtime": 1768852170.6893933,
+    "hash": "fd1180af81eb0fff67ffe207150c73f6"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\accordion.tsx": {
+    "mtime": 1768663952.8044925,
+    "hash": "1ab9c0ae828da7b2bd5cfd6e778d78a2"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\alert-dialog.tsx": {
+    "mtime": 1768663952.8044925,
+    "hash": "cb21a28172d7b2dcfa779c4d9e3e6138"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\alert.tsx": {
+    "mtime": 1768663952.8185048,
+    "hash": "27d39141a507b20ed52b7af644850375"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\aspect-ratio.tsx": {
+    "mtime": 1768663952.8185048,
+    "hash": "7abbbe7b04b98a307c559cfb5e301b34"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\avatar.tsx": {
+    "mtime": 1768663952.8341348,
+    "hash": "1e9aaa62ec5c90a723736a7bff9c2ddc"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\badge.tsx": {
+    "mtime": 1768663952.8341348,
+    "hash": "a4ff272d429bab415f27f7fd01a1e2b9"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\breadcrumb.tsx": {
+    "mtime": 1768663952.8341348,
+    "hash": "9e6bacc6f3debbf5be602ed566d63ead"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\button-group.tsx": {
+    "mtime": 1768663952.849754,
+    "hash": "b322685a0ae3c9fbf6f0f77e28ddec98"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\button.tsx": {
+    "mtime": 1768663952.859945,
+    "hash": "af3d8b618eba2684cee78e42d2945c93"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\calendar.tsx": {
+    "mtime": 1768663952.8654718,
+    "hash": "1b38a476e71cda6c914c55321dd5d25f"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\card.tsx": {
+    "mtime": 1768663952.8654718,
+    "hash": "99de711a6f221ab31430f0c2437b2465"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\carousel.tsx": {
+    "mtime": 1768663952.8654718,
+    "hash": "9f51cba1d05ddea3c414d36a6ae8b1b9"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\chart.tsx": {
+    "mtime": 1768663952.8811028,
+    "hash": "0c66aa31bcedfb55e613b3317f7ff0b3"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\checkbox.tsx": {
+    "mtime": 1768663952.8811028,
+    "hash": "8f82bb39d34a8bf92aa948c446df00c9"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\collapsible.tsx": {
+    "mtime": 1768663952.8967364,
+    "hash": "dad375a28987cdb7c87d3d7ec6808177"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\command.tsx": {
+    "mtime": 1768663952.8967364,
+    "hash": "75ddb5d9ae577bc27c9341cc7d0fb818"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\context-menu.tsx": {
+    "mtime": 1768663952.904266,
+    "hash": "dfcba980e3d6886dfc184fb37ab2cc5b"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\dialog.tsx": {
+    "mtime": 1768663952.9127736,
+    "hash": "0148b8f43eaf9165d46342241392857f"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\drawer.tsx": {
+    "mtime": 1768663952.9127736,
+    "hash": "d7b4764fe25f89c1d8d3bb88fdab1afe"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\dropdown-menu.tsx": {
+    "mtime": 1768663952.9237921,
+    "hash": "6cf8b9db80e1f8af1c37d0a35d4978c4"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\empty.tsx": {
+    "mtime": 1768663952.9288,
+    "hash": "54f1416fa023c63f09affafe7d5ff9b6"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\field.tsx": {
+    "mtime": 1768663952.9288,
+    "hash": "9824be7e1cc6368357e86c3c60007401"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\form.tsx": {
+    "mtime": 1768663952.944428,
+    "hash": "2f69f5e6d4c448aeb9260682e3a79705"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\hover-card.tsx": {
+    "mtime": 1768663952.944428,
+    "hash": "2a806abe96058eafe372e1f8b264551f"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\input-group.tsx": {
+    "mtime": 1768663952.944428,
+    "hash": "ae21ac400a0e8cdf226cff0485ab2b09"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\input-otp.tsx": {
+    "mtime": 1768663952.9615676,
+    "hash": "764264a5fc6fd69ff74b365811e07736"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\input.tsx": {
+    "mtime": 1768663952.963989,
+    "hash": "d232fe60b11a798e1633b00b2ea9de4c"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\item.tsx": {
+    "mtime": 1768663952.9694996,
+    "hash": "d3a7444d0fb49f8fa91b57f7140603e2"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\kbd.tsx": {
+    "mtime": 1768663952.9760106,
+    "hash": "4882ae0a88c1dfaf741f2f727949bcf2"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\label.tsx": {
+    "mtime": 1768663952.9760106,
+    "hash": "2d01ac52b1b7c4d01c9d09c02f08ba2c"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\menubar.tsx": {
+    "mtime": 1768663952.9916403,
+    "hash": "d978677aeb111d048dae2ec26feb30a3"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\navigation-menu.tsx": {
+    "mtime": 1768663952.9916403,
+    "hash": "fff71d119629f4384576abc8c86db98e"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\pagination.tsx": {
+    "mtime": 1768663952.9916403,
+    "hash": "607b8b7f4d58c3077249e56192760a64"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\popover.tsx": {
+    "mtime": 1768663953.0072596,
+    "hash": "09c92993acdba8f315704862f18cc9ff"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\progress.tsx": {
+    "mtime": 1768663953.0072596,
+    "hash": "7979073b46fefa5f90a4215fdff5ba5a"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\radio-group.tsx": {
+    "mtime": 1768663953.0228808,
+    "hash": "a61efebb67265d71632fb9524729469e"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\resizable.tsx": {
+    "mtime": 1768663953.0228808,
+    "hash": "4fad111fafa45ae68c9a0a22465b7ec5"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\scroll-area.tsx": {
+    "mtime": 1768663953.031396,
+    "hash": "c1a85e10b1d17c2e2badb0b2a5eb2b22"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\select.tsx": {
+    "mtime": 1768663953.0389085,
+    "hash": "8ca4147f64684089c60554f09933fba0"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\separator.tsx": {
+    "mtime": 1768663953.0389085,
+    "hash": "c5a8b5405f8d5fa8dfa3d4eabe3a2bc4"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\sheet.tsx": {
+    "mtime": 1768663953.0389085,
+    "hash": "23fc89561f842f153c4740aaab2600ac"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\sidebar.tsx": {
+    "mtime": 1768663953.0545378,
+    "hash": "d3837b637272212ca38e977fb8f53c60"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\skeleton.tsx": {
+    "mtime": 1768663953.061553,
+    "hash": "6da3e59043b0ae683f9302d318d19d16"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\slider.tsx": {
+    "mtime": 1768663953.0705633,
+    "hash": "da245cc3e54230e124635e33784f89b5"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\sonner.tsx": {
+    "mtime": 1768663953.0705633,
+    "hash": "73849904af65861ceede653f824aa552"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\spinner.tsx": {
+    "mtime": 1768663953.0705633,
+    "hash": "4799669575bae50e8c2b5a1764cb8c89"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\switch.tsx": {
+    "mtime": 1768663953.0861926,
+    "hash": "341211b469df84e5d9e8d65e87970871"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\table.tsx": {
+    "mtime": 1768663953.0861926,
+    "hash": "1b0da9795f8741a283b46cbd16918492"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\tabs.tsx": {
+    "mtime": 1768663953.1018138,
+    "hash": "2e84246671933960b1beba171f6a7c8a"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\textarea.tsx": {
+    "mtime": 1768663953.1018138,
+    "hash": "1c69b4138bea5bc6bb631a632add7562"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\toggle-group.tsx": {
+    "mtime": 1768663953.1174347,
+    "hash": "8941a113e6b85b26dba6091d97b478ba"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\toggle.tsx": {
+    "mtime": 1768663953.1174347,
+    "hash": "4fbb6228d377028844d88001b88774ff"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\components\\ui\\tooltip.tsx": {
+    "mtime": 1768663953.1174347,
+    "hash": "4739c9ad1c3b9f06058205e11a3bcd59"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\contexts\\GuestChartContext.tsx": {
+    "mtime": 1769019721.3866475,
+    "hash": "8039781f7ce71830fefbac0030168769"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\contexts\\ThemeContext.tsx": {
+    "mtime": 1768663953.1330557,
+    "hash": "406ca3330570fa4c4b3e7714c3fac7f8"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\hooks\\useComposition.ts": {
+    "mtime": 1768663953.148679,
+    "hash": "16bbb7a4775b78704034802eb6d8ea5b"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\hooks\\useMigration.ts": {
+    "mtime": 1769055621.5573757,
+    "hash": "b392425951498ed5193e4a39d85064f4"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\hooks\\useMobile.tsx": {
+    "mtime": 1768663953.164723,
+    "hash": "b8c573c05d1d83956a7ec166c87b8075"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\hooks\\usePersistFn.ts": {
+    "mtime": 1768663953.164723,
+    "hash": "693f129cc13fa61de95d481e6f7939c2"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\hooks\\useProfile.ts": {
+    "mtime": 1768846143.1307712,
+    "hash": "0658eec90b3f060c779ab84e0c4b8770"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\lib\\supabaseClient.ts": {
+    "mtime": 1769022543.3659587,
+    "hash": "6da9a2c9331ddd50afbdb24c5a548ede"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\lib\\trpc.ts": {
+    "mtime": 1768663953.1803508,
+    "hash": "46d2d65e51eece392c98fd30d7ab209d"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\lib\\utils.ts": {
+    "mtime": 1768663953.1803508,
+    "hash": "d9837f38cc05303254571985e3164050"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\AstroCounselor.tsx": {
+    "mtime": 1769021570.4106247,
+    "hash": "a5a53569b32c641365bea17a664fa359"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\CareerPathfinder.tsx": {
+    "mtime": 1768851133.2923517,
+    "hash": "f69cb3a69ceac407c53128dfc7706649"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\CareerValidator.tsx": {
+    "mtime": 1768928934.7524211,
+    "hash": "9996ac6528fb25a8afaa0d6a379e67df"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\ChartView.tsx": {
+    "mtime": 1768749702.996214,
+    "hash": "7adb04604c4ed0073a38ffb0b32ce4c9"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\ComponentShowcase.tsx": {
+    "mtime": 1768663953.2115922,
+    "hash": "325e863209f28295cdca85bb22c8cc2a"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\Dashboard.tsx": {
+    "mtime": 1769026629.2444623,
+    "hash": "673fa02e02dfdb6eab93f1993df444b1"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\EarningSources.tsx": {
+    "mtime": 1768928960.2948992,
+    "hash": "82285e547056e29072ea15da42c28004"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\Home.tsx": {
+    "mtime": 1769026606.239701,
+    "hash": "6bacd55e4b88f3a320366fe62d7175f7"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\NotFound.tsx": {
+    "mtime": 1768663953.242836,
+    "hash": "ee6791f7959d2123bd51b17e94b915a3"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\Onboarding.tsx": {
+    "mtime": 1769019474.617898,
+    "hash": "874fb06308d0d52ba81a56ed11ca69ed"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\Profile.tsx": {
+    "mtime": 1768663953.2472703,
+    "hash": "82c9e5cec0dfb51502505d9f1ed8b4e3"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\Remedies.tsx": {
+    "mtime": 1768757350.1532705,
+    "hash": "57408678b9f731684aa0593f1ec381de"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\SwotAnalysis.tsx": {
+    "mtime": 1768852021.8786783,
+    "hash": "19d1717e793b0cf65081afdd616a433b"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\Timing.tsx": {
+    "mtime": 1768746435.530121,
+    "hash": "44390b3213bbeb2e4eb43b998ae648f8"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\pages\\WealthStatus.tsx": {
+    "mtime": 1768749581.1280005,
+    "hash": "f4358a59e326e2cdfa1d1fa104cdd794"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\src\\_core\\hooks\\useAuth.ts": {
+    "mtime": 1769058528.066997,
+    "hash": "0858d4de373c2b73bcd4e838bdf3f904"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\drizzle\\0000_worthless_red_hulk.sql": {
+    "mtime": 1768663953.2743502,
+    "hash": "d94e39e998351f2d989e0ca91da0bcfb"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\drizzle\\0001_lumpy_stephen_strange.sql": {
+    "mtime": 1768663953.2899785,
+    "hash": "e7da1b830f0e4de10fbe295cab6d7eba"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\drizzle\\relations.ts": {
+    "mtime": 1768663953.2937608,
+    "hash": "a28675b96e43f38658fb1f293fbec3f2"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\drizzle\\schema.ts": {
+    "mtime": 1768663953.299269,
+    "hash": "3a537a8742c5984c7b1f7b3866fcaf9d"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\MIGRATION_TO_LOCAL_CALC.md": {
+    "mtime": 1768665928.3671613,
+    "hash": "d8b32f033109d68fb53595524c5f55e4"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\todo.md": {
+    "mtime": 1769055646.5183542,
+    "hash": "bf5d4a0121a091e3d89460c167bdf9c5"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\twa-config.md": {
+    "mtime": 1768663953.8065615,
+    "hash": "3ce5ea829d3bbb67baa008d4358eb490"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\verification-test-064.txt": {
+    "mtime": 1768710889.451114,
+    "hash": "1430531c989af9443f48d892094cca41"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\index.html": {
+    "mtime": 1769057525.905275,
+    "hash": "16385c44946ae6d6dab0cabb08de87db"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\career-shortcut.png": {
+    "mtime": 1768663952.4973087,
+    "hash": "ad2681a04ebdddaa86b6a3863973ef64"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\chart-shortcut.png": {
+    "mtime": 1768663952.5033205,
+    "hash": "ad2681a04ebdddaa86b6a3863973ef64"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-128x128.png": {
+    "mtime": 1768663952.516863,
+    "hash": "a198e4d00facc0d8c2da9da0f82f5a66"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-144x144.png": {
+    "mtime": 1768663952.527349,
+    "hash": "246dfd41c8f63a973caed233ca76bcd8"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-152x152.png": {
+    "mtime": 1768663952.534717,
+    "hash": "72b1f93f5add811c0a7dcaf55a162eb6"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-192x192.png": {
+    "mtime": 1768663952.5429199,
+    "hash": "d9d91ed3fd6a25ac77c8e00228fdd500"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-384x384.png": {
+    "mtime": 1768663952.555983,
+    "hash": "f2a2b6f345a3b2ddb504763f290c32cb"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-512x512.png": {
+    "mtime": 1768663952.6469657,
+    "hash": "e3dfc1c2f104e0bfb6bff91ac163b1c2"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-72x72.png": {
+    "mtime": 1768663952.6469657,
+    "hash": "ba11e602e03512746250fa9874db6a39"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\icon-96x96.png": {
+    "mtime": 1768663952.6609998,
+    "hash": "1447901c99bae868177f926d5be1d6ee"
+  },
+  "C:\\Ai Codebase\\Vedic & Astrology\\jyotish-career\\client\\public\\icons\\timing-shortcut.png": {
+    "mtime": 1768663952.6609998,
+    "hash": "9ec8b71924b65f781654c4e5a40e3dc6"
+  }
+}

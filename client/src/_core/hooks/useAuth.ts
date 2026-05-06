@@ -1,5 +1,6 @@
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
+import { supabase } from "@/lib/supabaseClient";
 import { TRPCClientError } from "@trpc/client";
 import { useCallback, useEffect, useMemo } from "react";
 
@@ -37,6 +38,7 @@ export function useAuth(options?: UseAuthOptions) {
       }
       throw error;
     } finally {
+      await supabase.auth.signOut();
       utils.auth.me.setData(undefined, null);
       await utils.auth.me.invalidate();
     }
@@ -76,6 +78,19 @@ export function useAuth(options?: UseAuthOptions) {
     meQuery.isLoading,
     state.user,
   ]);
+
+  useEffect(() => {
+    console.log("[useAuth] Setting up onAuthStateChange listener");
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("[useAuth] onAuthStateChange event:", event, "Session exists:", !!session);
+      utils.auth.me.invalidate();
+    });
+
+    return () => {
+      console.log("[useAuth] Cleaning up onAuthStateChange listener");
+      subscription.unsubscribe();
+    };
+  }, [utils]);
 
   return {
     ...state,

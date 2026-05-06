@@ -27,6 +27,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { LoginButton } from "@/components/LoginButton";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -158,6 +159,13 @@ export default function Home() {
                   </Link>
                 </Button>
               )}
+
+              {!isAuthenticated && (
+                <div className="w-full sm:w-auto">
+                  <LoginButton />
+                </div>
+              )}
+
               <Button size="lg" variant="outline" asChild className="text-lg px-8 h-12">
                 <a href="#features">Explore Features</a>
               </Button>
@@ -289,7 +297,27 @@ export default function Home() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+        </div>
+      </section>
 
+      {/* CTA Section */}
+      <section className="py-20 cosmic-gradient text-white">
+        <div className="container text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Discover Your Path?
+          </h2>
+          <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+            Join thousands who have found career clarity through Vedic astrology.
+            Your cosmic blueprint awaits. No sign-up required to get started.
+          </p>
+          <Button size="lg" variant="secondary" asChild className="text-lg px-8">
+            <Link href="/onboarding">
+              Start Your Journey Free
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Link>
+          </Button>
+        </div>
+      </section>
         </div>
       </section>
 

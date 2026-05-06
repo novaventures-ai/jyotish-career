@@ -34,7 +34,7 @@ import {
 import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
 import { NavSidebar, MobileHeader, MobileNav } from "@/components/AppShell";
-import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+import { LoginButton } from "@/components/LoginButton";
 
 
 
@@ -62,7 +62,6 @@ export default function Dashboard() {
     await logout();
     setLocation("/");
   };
-
 
 
   const { clearGuestChart } = useGuestChart();
@@ -207,7 +206,9 @@ export default function Dashboard() {
                     {createProfile.isPending ? "Saving..." : "Save to Profile"}
                   </Button>
                 ) : (
-                  <GoogleSignInButton variant="outline" className="border-amber-500 text-amber-700 hover:bg-amber-500/20" />
+                  <div className="w-48">
+                    <LoginButton />
+                  </div>
                 )}
               </CardContent>
             </Card>
