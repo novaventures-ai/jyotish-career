@@ -79,10 +79,18 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.lastSignedIn = user.lastSignedIn;
       updateSet.lastSignedIn = user.lastSignedIn;
     }
+    const ADMIN_EMAILS = [
+      'rahul.govalkar.1807@gmail.com',
+      'novaventures.contact@gmail.com'
+    ];
+
     if (user.role !== undefined) {
       values.role = user.role;
       updateSet.role = user.role;
-    } else if (user.openId === ENV.ownerOpenId) {
+    } else if (
+      (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase().trim())) ||
+      (user.openId === ENV.ownerOpenId)
+    ) {
       values.role = 'admin';
       updateSet.role = 'admin';
     }

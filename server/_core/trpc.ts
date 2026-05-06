@@ -61,6 +61,16 @@ const requireAiLimit = t.middleware(async opts => {
     (ctx.req as any)?.ip ||
     "anonymous";
 
+  // Bypass limit for admins
+  if (ctx.user?.role === 'admin') {
+    return next({
+      ctx: {
+        ...ctx,
+        aiCallsRemaining: 999,
+      },
+    });
+  }
+
   const result = checkSessionLimit(sessionKey);
 
   if (!result.allowed) {
@@ -89,6 +99,17 @@ const requireUserAndAiLimit = t.middleware(async opts => {
 
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
+  }
+
+  // Admin override: No rate limits for admins
+  if (ctx.user.role === 'admin') {
+    return next({
+      ctx: {
+        ...ctx,
+        user: ctx.user,
+        aiCallsRemaining: 999,
+      },
+    });
   }
 
   // Session key based on authenticated user ID
